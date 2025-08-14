@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package vortech.stream_management.config;
+
+import "buf/validate/validate.proto";
+
+option go_package = "pkg/config;config";
+
+message Config {
+  Listener grpc_listener = 1 [(buf.validate.field).required = true];
+  Listener http_listener = 2 [(buf.validate.field).required = true];
+  Logger logger = 3 [(buf.validate.field).required = true];
+}
+
+message TCPSocket {
+  string address = 1;
+  uint32 port = 2;
+  bool secure = 3;
+}
+
+message UnixSocket {
+  string path = 1;
+}
+
+message Listener {
+  oneof socket {
+    //    option (validate.required) = true;
+
+    TCPSocket tcp = 1;
+    UnixSocket unix = 2;
+  }
+}
+
+message Logger {
+  enum Level {
+    UNSPECIFIED = 0;
+    DEBUG = 1;
+    INFO = 2;
+    WARN = 3;
+    ERROR = 4;
+    PANIC = 5;
+    FATAL = 6;
+  }
+  Level level = 1;
+  bool pretty = 2;
+}

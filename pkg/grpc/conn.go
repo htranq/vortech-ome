@@ -10,12 +10,12 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/htranq/vortech-ome/pkg/config"
+	configpb "github.com/htranq/vortech-ome/pkg/config"
 )
 
 const XRequestIDHeader = "x-request-id"
 
-func NewConnection(config *config.TCPSocket, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
+func NewConnection(socket *configpb.TCPSocket, opts ...grpc.DialOption) (*grpc.ClientConn, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
@@ -23,14 +23,14 @@ func NewConnection(config *config.TCPSocket, opts ...grpc.DialOption) (*grpc.Cli
 		grpc.WithBlock(),
 		grpc.WithUnaryInterceptor(InjectRequestMetadata),
 	}
-	if config.GetSecure() {
+	if socket.GetSecure() {
 		options = append(options, grpc.WithTransportCredentials(credentials.NewTLS(nil)))
 	} else {
 		options = append(options, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	}
 
 	options = append(options, opts...)
-	conn, err := grpc.DialContext(ctx, fmt.Sprintf("%s:%d", config.Address, config.GetPort()), options...)
+	conn, err := grpc.DialContext(ctx, fmt.Sprintf("%s:%d", socket.Address, socket.GetPort()), options...)
 	if err != nil {
 		return nil, err
 	}
@@ -53,6 +53,6 @@ func InjectRequestMetadata(ctx context.Context, method string, req, reply interf
 	}
 
 	newCtx := metadata.NewOutgoingContext(ctx, md)
-	
+
 	return invoker(newCtx, method, req, reply, cc, opts...)
 }

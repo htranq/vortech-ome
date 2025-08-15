@@ -3,11 +3,11 @@ package logging
 import (
 	"context"
 	"fmt"
-	
+
 	"go.uber.org/zap"
 	"google.golang.org/grpc/metadata"
 
-	"github.com/htranq/vortech-ome/pkg/config"
+	configpb "github.com/htranq/vortech-ome/pkg/config"
 )
 
 var (
@@ -15,12 +15,12 @@ var (
 	_xRequestIDHeader = "x-request-id"
 )
 
-func NewLogger(msg *config.Logger) (*zap.Logger, error) {
+func NewLogger(cfg *configpb.Logger) (*zap.Logger, error) {
 	var (
 		c    zap.Config
 		opts []zap.Option
 	)
-	if msg.GetPretty() {
+	if cfg.GetPretty() {
 		c = zap.NewDevelopmentConfig()
 		opts = append(opts, zap.AddStacktrace(zap.ErrorLevel))
 	} else {
@@ -30,20 +30,20 @@ func NewLogger(msg *config.Logger) (*zap.Logger, error) {
 	level := zap.NewAtomicLevel()
 
 	levelName := "INFO"
-	if msg.Level != config.Logger_UNSPECIFIED {
-		levelName = msg.Level.String()
+	if cfg.Level != configpb.Logger_UNSPECIFIED {
+		levelName = cfg.Level.String()
 	}
 
 	if err := level.UnmarshalText([]byte(levelName)); err != nil {
-		return nil, fmt.Errorf("could not parse log level %s", msg.Level.String())
+		return nil, fmt.Errorf("could not parse log level %s", cfg.Level.String())
 	}
 	c.Level = level
 
 	return c.Build(opts...)
 }
 
-func InitLogger(msg *config.Logger) (err error) {
-	_logger, err = NewLogger(msg)
+func InitLogger(cfg *configpb.Logger) (err error) {
+	_logger, err = NewLogger(cfg)
 
 	return err
 }

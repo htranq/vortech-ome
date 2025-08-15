@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"net"
@@ -23,37 +23,37 @@ type Options struct {
 
 type Option func(o *Options)
 
-func Logger(logger *zap.Logger) Option {
+func WithLogger(logger *zap.Logger) Option {
 	return func(o *Options) {
 		o.Logger = logger
 	}
 }
 
-func GrpcListener(listener net.Listener) Option {
+func WithGrpcListener(listener net.Listener) Option {
 	return func(o *Options) {
 		o.GrpcListener = listener
 	}
 }
 
-func ServerOptions(opts ...grpc.ServerOption) Option {
+func WithServerOptions(opts ...grpc.ServerOption) Option {
 	return func(o *Options) {
 		o.GrpcServerOptions = append(o.GrpcServerOptions, opts...)
 	}
 }
 
-func BeforeStart(fn func() error) Option {
+func WithBeforeStart(fn func() error) Option {
 	return func(o *Options) {
 		o.BeforeStart = append(o.BeforeStart, fn)
 	}
 }
 
-func AfterStart(fn func() error) Option {
+func WithAfterStart(fn func() error) Option {
 	return func(o *Options) {
 		o.AfterStart = append(o.AfterStart, fn)
 	}
 }
 
-func BeforeStop(fn func() error) Option {
+func WithBeforeStop(fn func() error) Option {
 	return func(o *Options) {
 		o.BeforeStop = append(o.BeforeStop, fn)
 	}

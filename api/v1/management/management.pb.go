@@ -113,7 +113,8 @@ const file_management_proto_rawDesc = "" +
 	"\x06status\x18\x01 \x01(\tR\x06status2\xa7\x01\n" +
 	"\n" +
 	"Management\x12\x98\x01\n" +
-	"\tGetStatus\x126.vortech.stream_management.management.GetStatusRequest\x1a4.vortech.stream_management.management.GetStatusReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/management/statusB\x1eZ\x1capi/v1/management;managementb\x06proto3"
+	"\tGetStatus\x126.vortech.stream_management.management.GetStatusRequest\x1a4.vortech.stream_management.management.GetStatusReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/management/statusB\x87\x02\n" +
+	"(com.vortech.stream_management.managementB\x0fManagementProtoP\x01Z\x1capi/v1/management;management\xa2\x02\x03VSM\xaa\x02#Vortech.StreamManagement.Management\xca\x02#Vortech\\StreamManagement\\Management\xe2\x02/Vortech\\StreamManagement\\Management\\GPBMetadata\xea\x02%Vortech::StreamManagement::Managementb\x06proto3"
 
 var (
 	file_management_proto_rawDescOnce sync.Once

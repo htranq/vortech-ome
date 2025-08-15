@@ -411,7 +411,8 @@ const file_config_proto_rawDesc = "" +
 	"\x04WARN\x10\x03\x12\t\n" +
 	"\x05ERROR\x10\x04\x12\t\n" +
 	"\x05PANIC\x10\x05\x12\t\n" +
-	"\x05FATAL\x10\x06B\x13Z\x11pkg/config;configb\x06proto3"
+	"\x05FATAL\x10\x06B\xe4\x01\n" +
+	"$com.vortech.stream_management.configB\vConfigProtoP\x01Z\x11pkg/config;config\xa2\x02\x03VSC\xaa\x02\x1fVortech.StreamManagement.Config\xca\x02\x1fVortech\\StreamManagement\\Config\xe2\x02+Vortech\\StreamManagement\\Config\\GPBMetadata\xea\x02!Vortech::StreamManagement::Configb\x06proto3"
 
 var (
 	file_config_proto_rawDescOnce sync.Once

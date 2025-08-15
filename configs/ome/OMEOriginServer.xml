@@ -88,7 +88,7 @@
 		<Publishers>
 			<!-- The OVT is protocol for ORIGIN-EDGE -->
 			<OVT>
-				<Port>${env:OME_ORIGIN_PORT:9000}</Port>
+                <Port>9000</Port>
 				<WorkerCount>1</WorkerCount>
 			</OVT>
 			<LLHLS>

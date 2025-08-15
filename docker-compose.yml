@@ -8,7 +8,6 @@ services:
       - "3333:3333"               # WebRTC signaling (TCP)
       - "9999:9999/udp"           # WebRTC
       - "3478:3478"               # STUN/TURN (optional if using)
-      - "8080:8080"               # Web console / REST API (HTTP)
       - "9000:9000"               # OVT (Origin→Edge relay)
       - "10000-10009:10000-10009/udp"  # WebRTC media (SRTP)
     volumes:
@@ -20,8 +19,10 @@ services:
     restart: unless-stopped
     ports:
       - "3334:3333"               # WebRTC signaling (TCP) for Edge
-      - "3479:3478/"              # STUN/TURN (optional)
-      - "8081:8080"               # Web console / REST API (HTTP) for Edge
+      - "3479:3478"               # STUN/TURN (optional)
       - "10010-10019:10000-10009/udp"  # WebRTC media (SRTP) remapped range
     volumes:
       - ./configs/ome/OMEEdgeServer.xml:/opt/ovenmediaengine/bin/edge_conf/Server.xml:ro
+    command: >
+      /opt/ovenmediaengine/bin/OvenMediaEngine
+      -c edge_conf

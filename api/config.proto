@@ -24,7 +24,7 @@ message UnixSocket {
 
 message Listener {
   oneof socket {
-    //    option (validate.required) = true;
+    option (buf.validate.oneof).required = true;
 
     TCPSocket tcp = 1;
     UnixSocket unix = 2;

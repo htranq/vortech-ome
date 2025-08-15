@@ -283,7 +283,7 @@ func (x *Listener) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use Listener.ProtoReflect.Descriptor instead.
+// Deprecated: Use GrpcListener.ProtoReflect.Descriptor instead.
 func (*Listener) Descriptor() ([]byte, []int) {
 	return file_config_proto_rawDescGZIP(), []int{3}
 }
@@ -432,15 +432,15 @@ var file_config_proto_goTypes = []any{
 	(*Config)(nil),     // 1: vortech.stream_management.config.Config
 	(*TCPSocket)(nil),  // 2: vortech.stream_management.config.TCPSocket
 	(*UnixSocket)(nil), // 3: vortech.stream_management.config.UnixSocket
-	(*Listener)(nil),   // 4: vortech.stream_management.config.Listener
+	(*Listener)(nil),   // 4: vortech.stream_management.config.GrpcListener
 	(*Logger)(nil),     // 5: vortech.stream_management.config.Logger
 }
 var file_config_proto_depIdxs = []int32{
-	4, // 0: vortech.stream_management.config.Config.grpc_listener:type_name -> vortech.stream_management.config.Listener
-	4, // 1: vortech.stream_management.config.Config.http_listener:type_name -> vortech.stream_management.config.Listener
+	4, // 0: vortech.stream_management.config.Config.grpc_listener:type_name -> vortech.stream_management.config.GrpcListener
+	4, // 1: vortech.stream_management.config.Config.http_listener:type_name -> vortech.stream_management.config.GrpcListener
 	5, // 2: vortech.stream_management.config.Config.logger:type_name -> vortech.stream_management.config.Logger
-	2, // 3: vortech.stream_management.config.Listener.tcp:type_name -> vortech.stream_management.config.TCPSocket
-	3, // 4: vortech.stream_management.config.Listener.unix:type_name -> vortech.stream_management.config.UnixSocket
+	2, // 3: vortech.stream_management.config.GrpcListener.tcp:type_name -> vortech.stream_management.config.TCPSocket
+	3, // 4: vortech.stream_management.config.GrpcListener.unix:type_name -> vortech.stream_management.config.UnixSocket
 	0, // 5: vortech.stream_management.config.Logger.level:type_name -> vortech.stream_management.config.Logger.Level
 	6, // [6:6] is the sub-list for method output_type
 	6, // [6:6] is the sub-list for method input_type

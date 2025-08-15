@@ -9,8 +9,6 @@ import (
 	grpcctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	//"google.golang.org/grpc/health"
-	//healthv1 "google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/metadata"
 
 	"github.com/htranq/vortech-ome/internal/config"
@@ -42,18 +40,14 @@ func newService(cfg *configpb.Config, opts ...api.Option) api.Service {
 
 	logger := logging.Logger(context.Background())
 
-	//healthServer := health.NewServer()
-	//healthServer.SetServingStatus("", healthv1.HealthCheckResponse_SERVING)
-
 	defaultOpts := []api.Option{
 		api.Logger(logger),
-		api.Listener(listener),
+		api.GrpcListener(listener),
 		api.ServerOptions(
 			grpc.ChainUnaryInterceptor(
 				grpcctxtags.UnaryServerInterceptor(grpcctxtags.WithFieldExtractor(grpcctxtags.CodeGenRequestFieldExtractor)),
 			),
 		),
-		//api.HealthServer(healthServer),
 	}
 
 	//httpListener, err := net.Listen("tcp", fmt.Sprintf("%s:%d", cfg.HttpListener.GetTcp().Address, cfg.HttpListener.GetTcp().Port))

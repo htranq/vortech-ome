@@ -5,20 +5,20 @@ import (
 
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/health"
 )
 
 type Options struct {
-	Name          string
-	Logger        *zap.Logger
-	Server        *grpc.Server
-	ServerOptions []grpc.ServerOption
-	Listener      net.Listener
-	HttpListener  net.Listener
-	HealthServer  *health.Server
-	BeforeStart   []func() error
-	AfterStart    []func() error
-	BeforeStop    []func() error
+	Name   string
+	Logger *zap.Logger
+
+	GrpcServer        *grpc.Server
+	GrpcServerOptions []grpc.ServerOption
+	GrpcListener      net.Listener
+	HttpListener      net.Listener
+
+	BeforeStart []func() error
+	AfterStart  []func() error
+	BeforeStop  []func() error
 }
 
 type Option func(o *Options)
@@ -29,21 +29,15 @@ func Logger(logger *zap.Logger) Option {
 	}
 }
 
-func Listener(listener net.Listener) Option {
+func GrpcListener(listener net.Listener) Option {
 	return func(o *Options) {
-		o.Listener = listener
+		o.GrpcListener = listener
 	}
 }
 
 func ServerOptions(opts ...grpc.ServerOption) Option {
 	return func(o *Options) {
-		o.ServerOptions = append(o.ServerOptions, opts...)
-	}
-}
-
-func HealthServer(healthServer *health.Server) Option {
-	return func(o *Options) {
-		o.HealthServer = healthServer
+		o.GrpcServerOptions = append(o.GrpcServerOptions, opts...)
 	}
 }
 

@@ -10,18 +10,15 @@ import (
 
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/health"
-	//healthv1 "google.golang.org/grpc/health/grpc_health_v1"
 )
 
 type Service interface {
 	Logger() *zap.Logger
 	Listener() net.Listener
-	Server() *grpc.Server
+	GrpcServer() *grpc.Server
 	Init(opts ...Option)
 	Serve()
 	Options() Options
-	HealthServer() *health.Server
 }
 
 type service struct {
@@ -33,15 +30,11 @@ func (s *service) Logger() *zap.Logger {
 }
 
 func (s *service) Listener() net.Listener {
-	return s.opts.Listener
+	return s.opts.GrpcListener
 }
 
-func (s *service) Server() *grpc.Server {
-	return s.opts.Server
-}
-
-func (s *service) HealthServer() *health.Server {
-	return s.opts.HealthServer
+func (s *service) GrpcServer() *grpc.Server {
+	return s.opts.GrpcServer
 }
 
 func (s *service) Options() Options {
@@ -58,10 +51,8 @@ func (s *service) Serve() {
 	}
 
 	var wg sync.WaitGroup
-
 	wg.Add(1)
-
-	s.serve(&wg)
+	s.serveGrpc(&wg)
 	s.serveHttp(&wg)
 
 	go s.watchShutdownSignal()
@@ -97,8 +88,8 @@ func (s *service) watchShutdownSignal() {
 	}
 }
 
-func (s *service) serve(wg *sync.WaitGroup) {
-	listener := s.opts.Listener
+func (s *service) serveGrpc(wg *sync.WaitGroup) {
+	listener := s.opts.GrpcListener
 	if listener == nil {
 		return
 	}
@@ -107,8 +98,8 @@ func (s *service) serve(wg *sync.WaitGroup) {
 	go func() {
 		defer wg.Done()
 		logger.Info("grpc listening", zap.String("address", listener.Addr().String()))
-		if err := s.Server().Serve(listener); err != nil {
-			logger.Fatal("failed to serve", zap.Error(err))
+		if err := s.GrpcServer().Serve(listener); err != nil {
+			logger.Fatal("failed to serveGrpc", zap.Error(err))
 		}
 	}()
 }
@@ -125,7 +116,7 @@ func (s *service) serveHttp(wg *sync.WaitGroup) {
 		// TODO serve http server
 		//logger.Info("http listening", zap.String("address", listener.Addr().String()))
 		//if err := http.Serve(listener, s.opts.HttpServerMux); err != nil {
-		//	logger.Fatal("failed to serve", zap.Error(err))
+		//	logger.Fatal("failed to serveHttp", zap.Error(err))
 		//}
 	}()
 }
@@ -139,12 +130,7 @@ func (s *service) Init(opts ...Option) {
 func NewService(opts ...Option) Service {
 	o := newOptions(opts...)
 
-	o.Server = grpc.NewServer(o.ServerOptions...)
-	if o.HealthServer != nil {
-		// TODO: Register health server
-		//healthv1.RegisterHealthServer(o.Server, o.HealthServer)
-	}
-
+	o.GrpcServer = grpc.NewServer(o.GrpcServerOptions...)
 	s := &service{
 		opts: o,
 	}

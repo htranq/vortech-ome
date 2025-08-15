@@ -3,9 +3,9 @@ package logging
 import (
 	"context"
 	"fmt"
+	
 	"go.uber.org/zap"
 	"google.golang.org/grpc/metadata"
-	//"gopkg.in/DataDog/dd-trace-go.v1/ddtrace/tracer"
 
 	"github.com/htranq/vortech-ome/pkg/config"
 )
@@ -16,8 +16,10 @@ var (
 )
 
 func NewLogger(msg *config.Logger) (*zap.Logger, error) {
-	var c zap.Config
-	var opts []zap.Option
+	var (
+		c    zap.Config
+		opts []zap.Option
+	)
 	if msg.GetPretty() {
 		c = zap.NewDevelopmentConfig()
 		opts = append(opts, zap.AddStacktrace(zap.ErrorLevel))
@@ -42,6 +44,7 @@ func NewLogger(msg *config.Logger) (*zap.Logger, error) {
 
 func InitLogger(msg *config.Logger) (err error) {
 	_logger, err = NewLogger(msg)
+
 	return err
 }
 
@@ -52,6 +55,7 @@ func NewTmpLogger() *zap.Logger {
 	if err != nil {
 		panic(err)
 	}
+
 	return l
 }
 
@@ -62,7 +66,6 @@ func Logger(ctx context.Context) *zap.Logger {
 		return _logger
 	}
 	lg := injectXRequestID(_logger, ctx)
-	//lg = injectDatadogTracing(lg, ctx)
 
 	return lg
 }
@@ -70,34 +73,6 @@ func Logger(ctx context.Context) *zap.Logger {
 func SetXRequestIDHeader(headerName string) {
 	_xRequestIDHeader = headerName
 }
-
-//func injectDatadogTracing(config *zap.Logger, ctx context.Context) *zap.Logger {
-//
-//	if service, ok := os.LookupEnv("DD_SERVICE"); ok {
-//		config = config.With(zap.String("dd.service", service))
-//	}
-//
-//	if env, ok := os.LookupEnv("DD_ENV"); ok {
-//		config = config.With(zap.String("dd.env", env))
-//	}
-//
-//	if version, ok := os.LookupEnv("DD_VERSION"); ok {
-//		config = config.With(zap.String("dd.version", version))
-//	}
-//
-//	if ctx == nil {
-//		return config
-//	}
-//	span, ok := tracer.SpanFromContext(ctx)
-//	if !ok {
-//		return config
-//	}
-//
-//	spanCtx := span.Context()
-//
-//	return config.With(zap.String("dd.trace_id", strconv.FormatUint(spanCtx.TraceID(), 10)),
-//		zap.String("dd.span_id", strconv.FormatUint(spanCtx.SpanID(), 10)))
-//}
 
 func injectXRequestID(logger *zap.Logger, ctx context.Context) *zap.Logger {
 	if ctx == nil {
@@ -107,7 +82,7 @@ func injectXRequestID(logger *zap.Logger, ctx context.Context) *zap.Logger {
 	if requestID == "" {
 		return logger
 	}
-	return logger.With(zap.String("x_request_id", requestID))
+	return logger.With(zap.String(_xRequestIDHeader, requestID))
 }
 
 func getRequestID(ctx context.Context) string {

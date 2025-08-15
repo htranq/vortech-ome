@@ -30,12 +30,13 @@ func ParseFlags() *Flags {
 	flag.BoolVar(&f.Template, "template", false, "executes go templates on the configuration file")
 	flag.BoolVar(&f.Validate, "validate", false, "validates the configuration file and exits")
 	flag.Parse()
+
 	return f
 }
 
 // ParseFile ...
 func ParseFile(path string, pb proto.Message, template bool) error {
-	// Get absolute path representation for better error message in case file not found.
+	// Get absolute path representation for the better error message in case the file not found.
 	path, err := filepath.Abs(path)
 	if err != nil {
 		return err
@@ -54,17 +55,6 @@ func ParseFile(path string, pb proto.Message, template bool) error {
 			return err
 		}
 	}
-
-	// Lookup and replace ${KEY} variables.
-	lookupChain, err := NewLookupChainFromEnv()
-	if err != nil {
-		return err
-	}
-
-	contents = []byte(os.Expand(string(contents), lookupChain.Lookup))
-
-	// After done, erase secret
-	lookupChain.EraseSecret()
 
 	err = parseYAML(contents, pb)
 	if err != nil {
@@ -120,8 +110,9 @@ func executeTemplate(contents []byte) ([]byte, error) {
 	}
 
 	var b bytes.Buffer
-	if err := tmpl.Execute(&b, nil); err != nil {
+	if err = tmpl.Execute(&b, nil); err != nil {
 		return nil, err
 	}
+
 	return b.Bytes(), nil
 }

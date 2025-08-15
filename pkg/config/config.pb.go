@@ -283,7 +283,7 @@ func (x *Listener) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GrpcListener.ProtoReflect.Descriptor instead.
+// Deprecated: Use Listener.ProtoReflect.Descriptor instead.
 func (*Listener) Descriptor() ([]byte, []int) {
 	return file_config_proto_rawDescGZIP(), []int{3}
 }
@@ -396,11 +396,11 @@ const file_config_proto_rawDesc = "" +
 	"\x06secure\x18\x03 \x01(\bR\x06secure\" \n" +
 	"\n" +
 	"UnixSocket\x12\x12\n" +
-	"\x04path\x18\x01 \x01(\tR\x04path\"\x99\x01\n" +
+	"\x04path\x18\x01 \x01(\tR\x04path\"\xa0\x01\n" +
 	"\bListener\x12?\n" +
 	"\x03tcp\x18\x01 \x01(\v2+.vortech.stream_management.config.TCPSocketH\x00R\x03tcp\x12B\n" +
-	"\x04unix\x18\x02 \x01(\v2,.vortech.stream_management.config.UnixSocketH\x00R\x04unixB\b\n" +
-	"\x06socket\"\xc0\x01\n" +
+	"\x04unix\x18\x02 \x01(\v2,.vortech.stream_management.config.UnixSocketH\x00R\x04unixB\x0f\n" +
+	"\x06socket\x12\x05\xbaH\x02\b\x01\"\xc0\x01\n" +
 	"\x06Logger\x12D\n" +
 	"\x05level\x18\x01 \x01(\x0e2..vortech.stream_management.config.Logger.LevelR\x05level\x12\x16\n" +
 	"\x06pretty\x18\x02 \x01(\bR\x06pretty\"X\n" +
@@ -432,15 +432,15 @@ var file_config_proto_goTypes = []any{
 	(*Config)(nil),     // 1: vortech.stream_management.config.Config
 	(*TCPSocket)(nil),  // 2: vortech.stream_management.config.TCPSocket
 	(*UnixSocket)(nil), // 3: vortech.stream_management.config.UnixSocket
-	(*Listener)(nil),   // 4: vortech.stream_management.config.GrpcListener
+	(*Listener)(nil),   // 4: vortech.stream_management.config.Listener
 	(*Logger)(nil),     // 5: vortech.stream_management.config.Logger
 }
 var file_config_proto_depIdxs = []int32{
-	4, // 0: vortech.stream_management.config.Config.grpc_listener:type_name -> vortech.stream_management.config.GrpcListener
-	4, // 1: vortech.stream_management.config.Config.http_listener:type_name -> vortech.stream_management.config.GrpcListener
+	4, // 0: vortech.stream_management.config.Config.grpc_listener:type_name -> vortech.stream_management.config.Listener
+	4, // 1: vortech.stream_management.config.Config.http_listener:type_name -> vortech.stream_management.config.Listener
 	5, // 2: vortech.stream_management.config.Config.logger:type_name -> vortech.stream_management.config.Logger
-	2, // 3: vortech.stream_management.config.GrpcListener.tcp:type_name -> vortech.stream_management.config.TCPSocket
-	3, // 4: vortech.stream_management.config.GrpcListener.unix:type_name -> vortech.stream_management.config.UnixSocket
+	2, // 3: vortech.stream_management.config.Listener.tcp:type_name -> vortech.stream_management.config.TCPSocket
+	3, // 4: vortech.stream_management.config.Listener.unix:type_name -> vortech.stream_management.config.UnixSocket
 	0, // 5: vortech.stream_management.config.Logger.level:type_name -> vortech.stream_management.config.Logger.Level
 	6, // [6:6] is the sub-list for method output_type
 	6, // [6:6] is the sub-list for method input_type

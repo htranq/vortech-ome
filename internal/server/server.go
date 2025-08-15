@@ -7,14 +7,12 @@ import (
 	"os"
 
 	grpcctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
-	"go.uber.org/zap"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
-
 	"github.com/htranq/vortech-ome/internal/config"
 	"github.com/htranq/vortech-ome/internal/logging"
 	"github.com/htranq/vortech-ome/internal/server/api"
 	configpb "github.com/htranq/vortech-ome/pkg/config"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
 )
 
 func Run(f *config.Flags) {
@@ -60,18 +58,6 @@ func newService(cfg *configpb.Config, opts ...api.Option) api.Service {
 	svc := api.NewService(append(defaultOpts, opts...)...)
 
 	return svc
-}
-
-func GetRequestID(ctx context.Context) string {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return ""
-	}
-	mdUserID := md.Get("x-request-id")
-	if len(mdUserID) < 1 {
-		return ""
-	}
-	return mdUserID[0]
 }
 
 func loadConfig(f *config.Flags) *configpb.Config {

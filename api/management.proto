@@ -2,20 +2,52 @@ syntax = "proto3";
 
 package vortech.stream_management.management;
 
-import "google/api/annotations.proto";
+import "buf/validate/validate.proto";
 import "google/protobuf/timestamp.proto";
 
 option go_package = "api/v1/management;management";
 
+// For internal, service to service
 service Management {
-  // Get the current status of the stream management service.
-  rpc GetStatus(GetStatusRequest) returns (GetStatusReply) {
-    option (google.api.http) = {get: "/v1/management/status"};
-  }
+  rpc GetPlaybackUrl(GetPlaybackUrlRequest) returns (GetPlaybackUrlResponse);
+
+  //
+  rpc ExtendStreamToken(ExtendStreamTokenRequest) returns (ExtendStreamTokenResponse);
+  rpc RevokeStreamToken(RevokeStreamTokenRequest) returns (RevokeStreamTokenResponse);
 }
 
-message GetStatusRequest {}
+message GetPlaybackUrlRequest {
+  string table_id = 1 [(buf.validate.field).string = {min_len: 1}];
+  string service_id = 2 [(buf.validate.field).string = {min_len: 1}];
+  string user_id = 3 [(buf.validate.field).string = {min_len: 1}];
+  // TODO consider using expires_at or ttl (expires_in, expiry_duration)
+  // if nil then using default config (now + ttl)
+  optional google.protobuf.Timestamp expires_at = 4;
+}
 
-message GetStatusReply {
-  string status = 1;
+message GetPlaybackUrlResponse {
+  string url = 1; // included stream_token parameter
+  string stream_token = 2;
+  google.protobuf.Timestamp expires_at = 3;
+}
+
+message ExtendStreamTokenRequest {
+  // TODO consider to using [table_id, service_id, user_id] instead of stream_token
+  string stream_token = 1;
+  // if nil then using default config (current_expires_at + ttl)
+  optional google.protobuf.Timestamp expires_at = 2;
+}
+
+message ExtendStreamTokenResponse {
+  string stream_token = 1;
+  google.protobuf.Timestamp expires_at = 2;
+}
+
+message RevokeStreamTokenRequest {
+  // TODO consider to using [table_id, service_id, user_id] instead of stream_token
+  string stream_token = 1;
+}
+
+message RevokeStreamTokenResponse {
+  string stream_token = 1;
 }

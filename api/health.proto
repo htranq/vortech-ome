@@ -11,12 +11,15 @@ option go_package = "api/v1/health;health";
 service Health {
   // Get the current status of the stream management service.
   rpc GetStatus(GetStatusRequest) returns (GetStatusResponse) {
-    option (google.api.http) = {get: "/v1/management/status"};
+    option (google.api.http) = {get: "/v1/health/status"};
   }
 }
 
-message GetStatusRequest {}
+message GetStatusRequest {
+  string name = 1;
+}
 
 message GetStatusResponse {
   string status = 1;
+  string message = 2;
 }

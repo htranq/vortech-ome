@@ -25,6 +25,7 @@ const (
 
 type GetStatusRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,9 +60,17 @@ func (*GetStatusRequest) Descriptor() ([]byte, []int) {
 	return file_health_proto_rawDescGZIP(), []int{0}
 }
 
+func (x *GetStatusRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 type GetStatusResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Status        string                 `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -103,16 +112,25 @@ func (x *GetStatusResponse) GetStatus() string {
 	return ""
 }
 
+func (x *GetStatusResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_health_proto protoreflect.FileDescriptor
 
 const file_health_proto_rawDesc = "" +
 	"\n" +
-	"\fhealth.proto\x12 vortech.stream_management.health\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x12\n" +
-	"\x10GetStatusRequest\"+\n" +
+	"\fhealth.proto\x12 vortech.stream_management.health\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"&\n" +
+	"\x10GetStatusRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"E\n" +
 	"\x11GetStatusResponse\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\tR\x06status2\x9e\x01\n" +
-	"\x06Health\x12\x93\x01\n" +
-	"\tGetStatus\x122.vortech.stream_management.health.GetStatusRequest\x1a3.vortech.stream_management.health.GetStatusResponse\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/management/statusB\xe7\x01\n" +
+	"\x06status\x18\x01 \x01(\tR\x06status\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage2\x9a\x01\n" +
+	"\x06Health\x12\x8f\x01\n" +
+	"\tGetStatus\x122.vortech.stream_management.health.GetStatusRequest\x1a3.vortech.stream_management.health.GetStatusResponse\"\x19\x82\xd3\xe4\x93\x02\x13\x12\x11/v1/health/statusB\xe7\x01\n" +
 	"$com.vortech.stream_management.healthB\vHealthProtoP\x01Z\x14api/v1/health;health\xa2\x02\x03VSH\xaa\x02\x1fVortech.StreamManagement.Health\xca\x02\x1fVortech\\StreamManagement\\Health\xe2\x02+Vortech\\StreamManagement\\Health\\GPBMetadata\xea\x02!Vortech::StreamManagement::Healthb\x06proto3"
 
 var (

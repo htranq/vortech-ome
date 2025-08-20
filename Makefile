@@ -1,9 +1,9 @@
 SHELL := /bin/bash
 tag ?= local
 
-# build images from all services
-.PHONY: build-image-local
-build-image-local:
+# build image
+.PHONY: build-local
+build-local:
 	docker build -f build/Dockerfile -t stream_management:${tag} .
 
 .PHONY: build-linux

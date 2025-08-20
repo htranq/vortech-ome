@@ -7,10 +7,10 @@
 package management
 
 import (
-	_ "google.golang.org/genproto/googleapis/api/annotations"
+	_ "buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go/buf/validate"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	_ "google.golang.org/protobuf/types/known/timestamppb"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -23,26 +23,32 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type GetStatusRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+type GetPlaybackUrlRequest struct {
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	TableId   string                 `protobuf:"bytes,1,opt,name=table_id,json=tableId,proto3" json:"table_id,omitempty"`
+	ServiceId string                 `protobuf:"bytes,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	UserId    string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// TODO consider using expires_at or ttl (expires_in, expiry_duration)
+	// if nil then using default config (now + ttl)
+	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=expires_at,json=expiresAt,proto3,oneof" json:"expires_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetStatusRequest) Reset() {
-	*x = GetStatusRequest{}
+func (x *GetPlaybackUrlRequest) Reset() {
+	*x = GetPlaybackUrlRequest{}
 	mi := &file_management_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetStatusRequest) String() string {
+func (x *GetPlaybackUrlRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetStatusRequest) ProtoMessage() {}
+func (*GetPlaybackUrlRequest) ProtoMessage() {}
 
-func (x *GetStatusRequest) ProtoReflect() protoreflect.Message {
+func (x *GetPlaybackUrlRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_management_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -54,32 +60,62 @@ func (x *GetStatusRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetStatusRequest.ProtoReflect.Descriptor instead.
-func (*GetStatusRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetPlaybackUrlRequest.ProtoReflect.Descriptor instead.
+func (*GetPlaybackUrlRequest) Descriptor() ([]byte, []int) {
 	return file_management_proto_rawDescGZIP(), []int{0}
 }
 
-type GetStatusReply struct {
+func (x *GetPlaybackUrlRequest) GetTableId() string {
+	if x != nil {
+		return x.TableId
+	}
+	return ""
+}
+
+func (x *GetPlaybackUrlRequest) GetServiceId() string {
+	if x != nil {
+		return x.ServiceId
+	}
+	return ""
+}
+
+func (x *GetPlaybackUrlRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *GetPlaybackUrlRequest) GetExpiresAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return nil
+}
+
+type GetPlaybackUrlResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        string                 `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
+	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"` // included stream_token parameter
+	StreamToken   string                 `protobuf:"bytes,2,opt,name=stream_token,json=streamToken,proto3" json:"stream_token,omitempty"`
+	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GetStatusReply) Reset() {
-	*x = GetStatusReply{}
+func (x *GetPlaybackUrlResponse) Reset() {
+	*x = GetPlaybackUrlResponse{}
 	mi := &file_management_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GetStatusReply) String() string {
+func (x *GetPlaybackUrlResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GetStatusReply) ProtoMessage() {}
+func (*GetPlaybackUrlResponse) ProtoMessage() {}
 
-func (x *GetStatusReply) ProtoReflect() protoreflect.Message {
+func (x *GetPlaybackUrlResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_management_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -91,14 +127,223 @@ func (x *GetStatusReply) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GetStatusReply.ProtoReflect.Descriptor instead.
-func (*GetStatusReply) Descriptor() ([]byte, []int) {
+// Deprecated: Use GetPlaybackUrlResponse.ProtoReflect.Descriptor instead.
+func (*GetPlaybackUrlResponse) Descriptor() ([]byte, []int) {
 	return file_management_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GetStatusReply) GetStatus() string {
+func (x *GetPlaybackUrlResponse) GetUrl() string {
 	if x != nil {
-		return x.Status
+		return x.Url
+	}
+	return ""
+}
+
+func (x *GetPlaybackUrlResponse) GetStreamToken() string {
+	if x != nil {
+		return x.StreamToken
+	}
+	return ""
+}
+
+func (x *GetPlaybackUrlResponse) GetExpiresAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return nil
+}
+
+type ExtendStreamTokenRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// TODO consider to using [table_id, service_id, user_id] instead of stream_token
+	StreamToken string `protobuf:"bytes,1,opt,name=stream_token,json=streamToken,proto3" json:"stream_token,omitempty"`
+	// if nil then using default config (current_expires_at + ttl)
+	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=expires_at,json=expiresAt,proto3,oneof" json:"expires_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ExtendStreamTokenRequest) Reset() {
+	*x = ExtendStreamTokenRequest{}
+	mi := &file_management_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExtendStreamTokenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExtendStreamTokenRequest) ProtoMessage() {}
+
+func (x *ExtendStreamTokenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_management_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExtendStreamTokenRequest.ProtoReflect.Descriptor instead.
+func (*ExtendStreamTokenRequest) Descriptor() ([]byte, []int) {
+	return file_management_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ExtendStreamTokenRequest) GetStreamToken() string {
+	if x != nil {
+		return x.StreamToken
+	}
+	return ""
+}
+
+func (x *ExtendStreamTokenRequest) GetExpiresAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return nil
+}
+
+type ExtendStreamTokenResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StreamToken   string                 `protobuf:"bytes,1,opt,name=stream_token,json=streamToken,proto3" json:"stream_token,omitempty"`
+	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ExtendStreamTokenResponse) Reset() {
+	*x = ExtendStreamTokenResponse{}
+	mi := &file_management_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ExtendStreamTokenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ExtendStreamTokenResponse) ProtoMessage() {}
+
+func (x *ExtendStreamTokenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_management_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ExtendStreamTokenResponse.ProtoReflect.Descriptor instead.
+func (*ExtendStreamTokenResponse) Descriptor() ([]byte, []int) {
+	return file_management_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ExtendStreamTokenResponse) GetStreamToken() string {
+	if x != nil {
+		return x.StreamToken
+	}
+	return ""
+}
+
+func (x *ExtendStreamTokenResponse) GetExpiresAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.ExpiresAt
+	}
+	return nil
+}
+
+type RevokeStreamTokenRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// TODO consider to using [table_id, service_id, user_id] instead of stream_token
+	StreamToken   string `protobuf:"bytes,1,opt,name=stream_token,json=streamToken,proto3" json:"stream_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RevokeStreamTokenRequest) Reset() {
+	*x = RevokeStreamTokenRequest{}
+	mi := &file_management_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokeStreamTokenRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeStreamTokenRequest) ProtoMessage() {}
+
+func (x *RevokeStreamTokenRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_management_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeStreamTokenRequest.ProtoReflect.Descriptor instead.
+func (*RevokeStreamTokenRequest) Descriptor() ([]byte, []int) {
+	return file_management_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *RevokeStreamTokenRequest) GetStreamToken() string {
+	if x != nil {
+		return x.StreamToken
+	}
+	return ""
+}
+
+type RevokeStreamTokenResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	StreamToken   string                 `protobuf:"bytes,1,opt,name=stream_token,json=streamToken,proto3" json:"stream_token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RevokeStreamTokenResponse) Reset() {
+	*x = RevokeStreamTokenResponse{}
+	mi := &file_management_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RevokeStreamTokenResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RevokeStreamTokenResponse) ProtoMessage() {}
+
+func (x *RevokeStreamTokenResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_management_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RevokeStreamTokenResponse.ProtoReflect.Descriptor instead.
+func (*RevokeStreamTokenResponse) Descriptor() ([]byte, []int) {
+	return file_management_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *RevokeStreamTokenResponse) GetStreamToken() string {
+	if x != nil {
+		return x.StreamToken
 	}
 	return ""
 }
@@ -107,13 +352,38 @@ var File_management_proto protoreflect.FileDescriptor
 
 const file_management_proto_rawDesc = "" +
 	"\n" +
-	"\x10management.proto\x12$vortech.stream_management.management\x1a\x1cgoogle/api/annotations.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x12\n" +
-	"\x10GetStatusRequest\"(\n" +
-	"\x0eGetStatusReply\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\tR\x06status2\xa7\x01\n" +
+	"\x10management.proto\x12$vortech.stream_management.management\x1a\x1bbuf/validate/validate.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xd4\x01\n" +
+	"\x15GetPlaybackUrlRequest\x12\"\n" +
+	"\btable_id\x18\x01 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\atableId\x12&\n" +
 	"\n" +
-	"Management\x12\x98\x01\n" +
-	"\tGetStatus\x126.vortech.stream_management.management.GetStatusRequest\x1a4.vortech.stream_management.management.GetStatusReply\"\x1d\x82\xd3\xe4\x93\x02\x17\x12\x15/v1/management/statusB\x87\x02\n" +
+	"service_id\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\tserviceId\x12 \n" +
+	"\auser_id\x18\x03 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06userId\x12>\n" +
+	"\n" +
+	"expires_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x00R\texpiresAt\x88\x01\x01B\r\n" +
+	"\v_expires_at\"\x88\x01\n" +
+	"\x16GetPlaybackUrlResponse\x12\x10\n" +
+	"\x03url\x18\x01 \x01(\tR\x03url\x12!\n" +
+	"\fstream_token\x18\x02 \x01(\tR\vstreamToken\x129\n" +
+	"\n" +
+	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\"\x8c\x01\n" +
+	"\x18ExtendStreamTokenRequest\x12!\n" +
+	"\fstream_token\x18\x01 \x01(\tR\vstreamToken\x12>\n" +
+	"\n" +
+	"expires_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampH\x00R\texpiresAt\x88\x01\x01B\r\n" +
+	"\v_expires_at\"y\n" +
+	"\x19ExtendStreamTokenResponse\x12!\n" +
+	"\fstream_token\x18\x01 \x01(\tR\vstreamToken\x129\n" +
+	"\n" +
+	"expires_at\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\"=\n" +
+	"\x18RevokeStreamTokenRequest\x12!\n" +
+	"\fstream_token\x18\x01 \x01(\tR\vstreamToken\">\n" +
+	"\x19RevokeStreamTokenResponse\x12!\n" +
+	"\fstream_token\x18\x01 \x01(\tR\vstreamToken2\xc8\x03\n" +
+	"\n" +
+	"Management\x12\x8b\x01\n" +
+	"\x0eGetPlaybackUrl\x12;.vortech.stream_management.management.GetPlaybackUrlRequest\x1a<.vortech.stream_management.management.GetPlaybackUrlResponse\x12\x94\x01\n" +
+	"\x11ExtendStreamToken\x12>.vortech.stream_management.management.ExtendStreamTokenRequest\x1a?.vortech.stream_management.management.ExtendStreamTokenResponse\x12\x94\x01\n" +
+	"\x11RevokeStreamToken\x12>.vortech.stream_management.management.RevokeStreamTokenRequest\x1a?.vortech.stream_management.management.RevokeStreamTokenResponseB\x87\x02\n" +
 	"(com.vortech.stream_management.managementB\x0fManagementProtoP\x01Z\x1capi/v1/management;management\xa2\x02\x03VSM\xaa\x02#Vortech.StreamManagement.Management\xca\x02#Vortech\\StreamManagement\\Management\xe2\x02/Vortech\\StreamManagement\\Management\\GPBMetadata\xea\x02%Vortech::StreamManagement::Managementb\x06proto3"
 
 var (
@@ -128,19 +398,32 @@ func file_management_proto_rawDescGZIP() []byte {
 	return file_management_proto_rawDescData
 }
 
-var file_management_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_management_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_management_proto_goTypes = []any{
-	(*GetStatusRequest)(nil), // 0: vortech.stream_management.management.GetStatusRequest
-	(*GetStatusReply)(nil),   // 1: vortech.stream_management.management.GetStatusReply
+	(*GetPlaybackUrlRequest)(nil),     // 0: vortech.stream_management.management.GetPlaybackUrlRequest
+	(*GetPlaybackUrlResponse)(nil),    // 1: vortech.stream_management.management.GetPlaybackUrlResponse
+	(*ExtendStreamTokenRequest)(nil),  // 2: vortech.stream_management.management.ExtendStreamTokenRequest
+	(*ExtendStreamTokenResponse)(nil), // 3: vortech.stream_management.management.ExtendStreamTokenResponse
+	(*RevokeStreamTokenRequest)(nil),  // 4: vortech.stream_management.management.RevokeStreamTokenRequest
+	(*RevokeStreamTokenResponse)(nil), // 5: vortech.stream_management.management.RevokeStreamTokenResponse
+	(*timestamppb.Timestamp)(nil),     // 6: google.protobuf.Timestamp
 }
 var file_management_proto_depIdxs = []int32{
-	0, // 0: vortech.stream_management.management.Management.GetStatus:input_type -> vortech.stream_management.management.GetStatusRequest
-	1, // 1: vortech.stream_management.management.Management.GetStatus:output_type -> vortech.stream_management.management.GetStatusReply
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	6, // 0: vortech.stream_management.management.GetPlaybackUrlRequest.expires_at:type_name -> google.protobuf.Timestamp
+	6, // 1: vortech.stream_management.management.GetPlaybackUrlResponse.expires_at:type_name -> google.protobuf.Timestamp
+	6, // 2: vortech.stream_management.management.ExtendStreamTokenRequest.expires_at:type_name -> google.protobuf.Timestamp
+	6, // 3: vortech.stream_management.management.ExtendStreamTokenResponse.expires_at:type_name -> google.protobuf.Timestamp
+	0, // 4: vortech.stream_management.management.Management.GetPlaybackUrl:input_type -> vortech.stream_management.management.GetPlaybackUrlRequest
+	2, // 5: vortech.stream_management.management.Management.ExtendStreamToken:input_type -> vortech.stream_management.management.ExtendStreamTokenRequest
+	4, // 6: vortech.stream_management.management.Management.RevokeStreamToken:input_type -> vortech.stream_management.management.RevokeStreamTokenRequest
+	1, // 7: vortech.stream_management.management.Management.GetPlaybackUrl:output_type -> vortech.stream_management.management.GetPlaybackUrlResponse
+	3, // 8: vortech.stream_management.management.Management.ExtendStreamToken:output_type -> vortech.stream_management.management.ExtendStreamTokenResponse
+	5, // 9: vortech.stream_management.management.Management.RevokeStreamToken:output_type -> vortech.stream_management.management.RevokeStreamTokenResponse
+	7, // [7:10] is the sub-list for method output_type
+	4, // [4:7] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_management_proto_init() }
@@ -148,13 +431,15 @@ func file_management_proto_init() {
 	if File_management_proto != nil {
 		return
 	}
+	file_management_proto_msgTypes[0].OneofWrappers = []any{}
+	file_management_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_management_proto_rawDesc), len(file_management_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

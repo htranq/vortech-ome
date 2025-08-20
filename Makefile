@@ -1,10 +1,10 @@
 SHELL := /bin/bash
-CI_DOCKER_IMAGE=vortech-stream-management/<your docker repo>
+tag ?= local
 
 # build images from all services
 .PHONY: build-image-local
-build-image-local: build-linux
-	docker build --platform linux/amd64 -f build/local.Dockerfile -t ${CI_DOCKER_IMAGE}/${service}:${tag} . --build-arg service=${service}
+build-image-local:
+	docker build -f build/Dockerfile -t stream_management:${tag} .
 
 .PHONY: build-linux
 build-linux: download-go-mod

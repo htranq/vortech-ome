@@ -15,10 +15,12 @@ import (
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/protobuf/encoding/protojson"
 
+	healthpb "github.com/htranq/vortech-ome/api/v1/health"
 	managementpb "github.com/htranq/vortech-ome/api/v1/management"
 	"github.com/htranq/vortech-ome/internal/config"
 	"github.com/htranq/vortech-ome/internal/logging"
 	"github.com/htranq/vortech-ome/internal/server/api"
+	healthsrv "github.com/htranq/vortech-ome/internal/server/health"
 	managementsrv "github.com/htranq/vortech-ome/internal/server/management"
 	configpb "github.com/htranq/vortech-ome/pkg/config"
 )
@@ -41,11 +43,13 @@ func serve(cfg *configpb.Config) {
 
 	// init server handlers
 	var (
+		health     = healthsrv.New()
 		management = managementsrv.New()
 	)
 
 	// register grpc servers
 	server := service.GrpcServer()
+	healthpb.RegisterHealthServer(server, health)
 	managementpb.RegisterManagementServer(server, management)
 
 	// register http servers
@@ -67,9 +71,10 @@ func serve(cfg *configpb.Config) {
 	)
 
 	service.HttpServerMux().Handle("/", grpcGatewayMux)
-	if err := managementpb.RegisterManagementHandlerServer(ctx, grpcGatewayMux, management); err != nil {
-		logger.Fatal("could not register management http server", zap.Error(err))
+	if err := healthpb.RegisterHealthHandlerServer(ctx, grpcGatewayMux, health); err != nil {
+		logger.Fatal("could not register health http server", zap.Error(err))
 	}
+	// Temporarily disable management HTTP gateway registration until proto/gateway files are aligned
 
 	// register reflection
 	reflection.Register(server)

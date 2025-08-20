@@ -26,3 +26,16 @@ services:
     command: >
       /opt/ovenmediaengine/bin/OvenMediaEngine
       -c edge_conf
+
+  stream_management:
+    build:
+      context: .
+      dockerfile: build/Dockerfile
+    image: stream_management:local
+    container_name: vortech_ome
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - ./configs/config.yaml:/app/config.yaml:ro

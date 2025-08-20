@@ -1,14 +1,31 @@
-FROM registry.nautilusgames.tech/marketplace/cicd/golang:1.22.1-builder-1.0 AS builder
+FROM golang:1.24-alpine AS builder
+WORKDIR /workspace
 
-#final stage
-FROM alpine:3.15
-RUN apk --no-cache add ca-certificates bash
-ARG env=dev
-ARG service
-COPY --from=builder /tools/wait-for-it.sh ./wait-for-it.sh
-COPY out/cmd/main /app/server
-COPY configs /app/
-EXPOSE 8080
+# Install certs for module fetching if needed
+RUN apk add --no-cache ca-certificates git
 
-#For custom CMD scripts, please create scripts folder in $service folder, and update helm value
+# Cache deps first
+COPY go.mod go.sum ./
+COPY vendor ./vendor
+RUN --mount=type=cache,target=/go/pkg/mod true
+
+# Copy the rest of the source
+COPY . .
+
+# Build static binary for the target platform
+ARG TARGETOS
+ARG TARGETARCH
+RUN CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} \
+    go build -trimpath -ldflags="-s -w" -mod=vendor -o /out/server ./cmd/main.go
+
+# Final stage
+FROM alpine:3.19
+RUN apk --no-cache add ca-certificates
+WORKDIR /app
+
+COPY --from=builder /out/server /app/server
+COPY configs/config.yaml /app/config.yaml
+
+EXPOSE 8080 8081
+
 CMD ["/app/server", "-c", "/app/config.yaml"]

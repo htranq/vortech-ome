@@ -12,7 +12,7 @@ type ManagementClient struct {
 	pb.ManagementClient
 }
 
-func NewMyGSCClient(socket *configpb.TCPSocket, options ...grpc.DialOption) (*ManagementClient, error) {
+func NewManagementClient(socket *configpb.TCPSocket, options ...grpc.DialOption) (*ManagementClient, error) {
 	conn, err := grpccli.NewConnection(socket, options...)
 	if err != nil {
 		return nil, err

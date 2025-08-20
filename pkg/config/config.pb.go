@@ -88,6 +88,7 @@ type Config struct {
 	GrpcListener  *Listener              `protobuf:"bytes,1,opt,name=grpc_listener,json=grpcListener,proto3" json:"grpc_listener,omitempty"`
 	HttpListener  *Listener              `protobuf:"bytes,2,opt,name=http_listener,json=httpListener,proto3" json:"http_listener,omitempty"`
 	Logger        *Logger                `protobuf:"bytes,3,opt,name=logger,proto3" json:"logger,omitempty"`
+	CasTable      *TCPSocket             `protobuf:"bytes,4,opt,name=cas_table,json=casTable,proto3" json:"cas_table,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -139,6 +140,13 @@ func (x *Config) GetHttpListener() *Listener {
 func (x *Config) GetLogger() *Logger {
 	if x != nil {
 		return x.Logger
+	}
+	return nil
+}
+
+func (x *Config) GetCasTable() *TCPSocket {
+	if x != nil {
+		return x.CasTable
 	}
 	return nil
 }
@@ -429,11 +437,12 @@ var File_config_proto protoreflect.FileDescriptor
 
 const file_config_proto_rawDesc = "" +
 	"\n" +
-	"\fconfig.proto\x12 vortech.stream_management.config\x1a\x1bbuf/validate/validate.proto\"\x84\x02\n" +
+	"\fconfig.proto\x12 vortech.stream_management.config\x1a\x1bbuf/validate/validate.proto\"\xd6\x02\n" +
 	"\x06Config\x12W\n" +
 	"\rgrpc_listener\x18\x01 \x01(\v2*.vortech.stream_management.config.ListenerB\x06\xbaH\x03\xc8\x01\x01R\fgrpcListener\x12W\n" +
 	"\rhttp_listener\x18\x02 \x01(\v2*.vortech.stream_management.config.ListenerB\x06\xbaH\x03\xc8\x01\x01R\fhttpListener\x12H\n" +
-	"\x06logger\x18\x03 \x01(\v2(.vortech.stream_management.config.LoggerB\x06\xbaH\x03\xc8\x01\x01R\x06logger\"Q\n" +
+	"\x06logger\x18\x03 \x01(\v2(.vortech.stream_management.config.LoggerB\x06\xbaH\x03\xc8\x01\x01R\x06logger\x12P\n" +
+	"\tcas_table\x18\x04 \x01(\v2+.vortech.stream_management.config.TCPSocketB\x06\xbaH\x03\xc8\x01\x01R\bcasTable\"Q\n" +
 	"\tTCPSocket\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x12\n" +
 	"\x04port\x18\x02 \x01(\rR\x04port\x12\x16\n" +
@@ -487,14 +496,15 @@ var file_config_proto_depIdxs = []int32{
 	4, // 0: vortech.stream_management.config.Config.grpc_listener:type_name -> vortech.stream_management.config.Listener
 	4, // 1: vortech.stream_management.config.Config.http_listener:type_name -> vortech.stream_management.config.Listener
 	5, // 2: vortech.stream_management.config.Config.logger:type_name -> vortech.stream_management.config.Logger
-	2, // 3: vortech.stream_management.config.Listener.tcp:type_name -> vortech.stream_management.config.TCPSocket
-	3, // 4: vortech.stream_management.config.Listener.unix:type_name -> vortech.stream_management.config.UnixSocket
-	0, // 5: vortech.stream_management.config.Logger.level:type_name -> vortech.stream_management.config.Logger.Level
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	2, // 3: vortech.stream_management.config.Config.cas_table:type_name -> vortech.stream_management.config.TCPSocket
+	2, // 4: vortech.stream_management.config.Listener.tcp:type_name -> vortech.stream_management.config.TCPSocket
+	3, // 5: vortech.stream_management.config.Listener.unix:type_name -> vortech.stream_management.config.UnixSocket
+	0, // 6: vortech.stream_management.config.Logger.level:type_name -> vortech.stream_management.config.Logger.Level
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_config_proto_init() }

@@ -13,3 +13,8 @@ http_listener:
 logger:
   pretty: true
   level: DEBUG
+
+cas_table:
+  address: localhost
+  port: 8080
+  secure: false

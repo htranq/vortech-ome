@@ -11,7 +11,7 @@ message Config {
   Listener http_listener = 2 [(buf.validate.field).required = true];
   Logger logger = 3 [(buf.validate.field).required = true];
 
-  TCPSocket cas_table = 4 [(buf.validate.field).required = true];
+  CasTable cas_table = 4 [(buf.validate.field).required = true];
 }
 
 message TCPSocket {
@@ -45,6 +45,11 @@ message Logger {
   }
   Level level = 1;
   bool pretty = 2;
+}
+
+message CasTable {
+  bool enabled = 1;
+  TCPSocket socket = 2 [(buf.validate.field).required = true];
 }
 
 message Token {

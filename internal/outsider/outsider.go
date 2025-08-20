@@ -1,27 +1,29 @@
 package outsider
 
 import (
-	"context"
-
-	caspb "github.com/htranq/vortech-ome/pkg/cas/api/v1/table"
+	"github.com/htranq/vortech-ome/internal/outsider/castable"
 	cascli "github.com/htranq/vortech-ome/pkg/cas/client"
+	"github.com/htranq/vortech-ome/pkg/config"
 )
 
 type Outsider struct {
-	casTableCli *cascli.TableClient
+	castable castable.Castable
 }
 
-func New(casTableCli *cascli.TableClient) *Outsider {
+func New(cfg *config.Config) (*Outsider, error) {
+	var (
+		err    error
+		casCli *cascli.TableClient
+	)
+
+	if cfg.GetCasTable().GetEnabled() {
+		casCli, err = cascli.NewTableClient(cfg.GetCasTable().GetSocket())
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return &Outsider{
-		casTableCli: casTableCli,
-	}
-}
-
-func (s *Outsider) GetCasTablePlaybackUrl(ctx context.Context, tableID string) (string, error) {
-	resp, err := s.casTableCli.GetPlayBackUrl(ctx, &caspb.GetPlayBackUrlRequest{TableId: tableID})
-	if err != nil {
-		return "", err
-	}
-
-	return resp.GetPlayBackUrl(), nil
+		castable: castable.New(casCli),
+	}, nil
 }

@@ -88,7 +88,7 @@ type Config struct {
 	GrpcListener  *Listener              `protobuf:"bytes,1,opt,name=grpc_listener,json=grpcListener,proto3" json:"grpc_listener,omitempty"`
 	HttpListener  *Listener              `protobuf:"bytes,2,opt,name=http_listener,json=httpListener,proto3" json:"http_listener,omitempty"`
 	Logger        *Logger                `protobuf:"bytes,3,opt,name=logger,proto3" json:"logger,omitempty"`
-	CasTable      *TCPSocket             `protobuf:"bytes,4,opt,name=cas_table,json=casTable,proto3" json:"cas_table,omitempty"`
+	CasTable      *CasTable              `protobuf:"bytes,4,opt,name=cas_table,json=casTable,proto3" json:"cas_table,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -144,7 +144,7 @@ func (x *Config) GetLogger() *Logger {
 	return nil
 }
 
-func (x *Config) GetCasTable() *TCPSocket {
+func (x *Config) GetCasTable() *CasTable {
 	if x != nil {
 		return x.CasTable
 	}
@@ -389,6 +389,58 @@ func (x *Logger) GetPretty() bool {
 	return false
 }
 
+type CasTable struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Socket        *TCPSocket             `protobuf:"bytes,2,opt,name=socket,proto3" json:"socket,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CasTable) Reset() {
+	*x = CasTable{}
+	mi := &file_config_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CasTable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CasTable) ProtoMessage() {}
+
+func (x *CasTable) ProtoReflect() protoreflect.Message {
+	mi := &file_config_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CasTable.ProtoReflect.Descriptor instead.
+func (*CasTable) Descriptor() ([]byte, []int) {
+	return file_config_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *CasTable) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *CasTable) GetSocket() *TCPSocket {
+	if x != nil {
+		return x.Socket
+	}
+	return nil
+}
+
 type Token struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
@@ -398,7 +450,7 @@ type Token struct {
 
 func (x *Token) Reset() {
 	*x = Token{}
-	mi := &file_config_proto_msgTypes[5]
+	mi := &file_config_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -410,7 +462,7 @@ func (x *Token) String() string {
 func (*Token) ProtoMessage() {}
 
 func (x *Token) ProtoReflect() protoreflect.Message {
-	mi := &file_config_proto_msgTypes[5]
+	mi := &file_config_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -423,7 +475,7 @@ func (x *Token) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Token.ProtoReflect.Descriptor instead.
 func (*Token) Descriptor() ([]byte, []int) {
-	return file_config_proto_rawDescGZIP(), []int{5}
+	return file_config_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Token) GetEnabled() bool {
@@ -437,12 +489,12 @@ var File_config_proto protoreflect.FileDescriptor
 
 const file_config_proto_rawDesc = "" +
 	"\n" +
-	"\fconfig.proto\x12 vortech.stream_management.config\x1a\x1bbuf/validate/validate.proto\"\xd6\x02\n" +
+	"\fconfig.proto\x12 vortech.stream_management.config\x1a\x1bbuf/validate/validate.proto\"\xd5\x02\n" +
 	"\x06Config\x12W\n" +
 	"\rgrpc_listener\x18\x01 \x01(\v2*.vortech.stream_management.config.ListenerB\x06\xbaH\x03\xc8\x01\x01R\fgrpcListener\x12W\n" +
 	"\rhttp_listener\x18\x02 \x01(\v2*.vortech.stream_management.config.ListenerB\x06\xbaH\x03\xc8\x01\x01R\fhttpListener\x12H\n" +
-	"\x06logger\x18\x03 \x01(\v2(.vortech.stream_management.config.LoggerB\x06\xbaH\x03\xc8\x01\x01R\x06logger\x12P\n" +
-	"\tcas_table\x18\x04 \x01(\v2+.vortech.stream_management.config.TCPSocketB\x06\xbaH\x03\xc8\x01\x01R\bcasTable\"Q\n" +
+	"\x06logger\x18\x03 \x01(\v2(.vortech.stream_management.config.LoggerB\x06\xbaH\x03\xc8\x01\x01R\x06logger\x12O\n" +
+	"\tcas_table\x18\x04 \x01(\v2*.vortech.stream_management.config.CasTableB\x06\xbaH\x03\xc8\x01\x01R\bcasTable\"Q\n" +
 	"\tTCPSocket\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x12\n" +
 	"\x04port\x18\x02 \x01(\rR\x04port\x12\x16\n" +
@@ -464,7 +516,10 @@ const file_config_proto_rawDesc = "" +
 	"\x04WARN\x10\x03\x12\t\n" +
 	"\x05ERROR\x10\x04\x12\t\n" +
 	"\x05PANIC\x10\x05\x12\t\n" +
-	"\x05FATAL\x10\x06\"!\n" +
+	"\x05FATAL\x10\x06\"q\n" +
+	"\bCasTable\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12K\n" +
+	"\x06socket\x18\x02 \x01(\v2+.vortech.stream_management.config.TCPSocketB\x06\xbaH\x03\xc8\x01\x01R\x06socket\"!\n" +
 	"\x05Token\x12\x18\n" +
 	"\aenabled\x18\x01 \x01(\bR\aenabledB\xe4\x01\n" +
 	"$com.vortech.stream_management.configB\vConfigProtoP\x01Z\x11pkg/config;config\xa2\x02\x03VSC\xaa\x02\x1fVortech.StreamManagement.Config\xca\x02\x1fVortech\\StreamManagement\\Config\xe2\x02+Vortech\\StreamManagement\\Config\\GPBMetadata\xea\x02!Vortech::StreamManagement::Configb\x06proto3"
@@ -482,7 +537,7 @@ func file_config_proto_rawDescGZIP() []byte {
 }
 
 var file_config_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_config_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_config_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_config_proto_goTypes = []any{
 	(Logger_Level)(0),  // 0: vortech.stream_management.config.Logger.Level
 	(*Config)(nil),     // 1: vortech.stream_management.config.Config
@@ -490,21 +545,23 @@ var file_config_proto_goTypes = []any{
 	(*UnixSocket)(nil), // 3: vortech.stream_management.config.UnixSocket
 	(*Listener)(nil),   // 4: vortech.stream_management.config.Listener
 	(*Logger)(nil),     // 5: vortech.stream_management.config.Logger
-	(*Token)(nil),      // 6: vortech.stream_management.config.Token
+	(*CasTable)(nil),   // 6: vortech.stream_management.config.CasTable
+	(*Token)(nil),      // 7: vortech.stream_management.config.Token
 }
 var file_config_proto_depIdxs = []int32{
 	4, // 0: vortech.stream_management.config.Config.grpc_listener:type_name -> vortech.stream_management.config.Listener
 	4, // 1: vortech.stream_management.config.Config.http_listener:type_name -> vortech.stream_management.config.Listener
 	5, // 2: vortech.stream_management.config.Config.logger:type_name -> vortech.stream_management.config.Logger
-	2, // 3: vortech.stream_management.config.Config.cas_table:type_name -> vortech.stream_management.config.TCPSocket
+	6, // 3: vortech.stream_management.config.Config.cas_table:type_name -> vortech.stream_management.config.CasTable
 	2, // 4: vortech.stream_management.config.Listener.tcp:type_name -> vortech.stream_management.config.TCPSocket
 	3, // 5: vortech.stream_management.config.Listener.unix:type_name -> vortech.stream_management.config.UnixSocket
 	0, // 6: vortech.stream_management.config.Logger.level:type_name -> vortech.stream_management.config.Logger.Level
-	7, // [7:7] is the sub-list for method output_type
-	7, // [7:7] is the sub-list for method input_type
-	7, // [7:7] is the sub-list for extension type_name
-	7, // [7:7] is the sub-list for extension extendee
-	0, // [0:7] is the sub-list for field type_name
+	2, // 7: vortech.stream_management.config.CasTable.socket:type_name -> vortech.stream_management.config.TCPSocket
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_config_proto_init() }
@@ -522,7 +579,7 @@ func file_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_config_proto_rawDesc), len(file_config_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   6,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

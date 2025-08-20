@@ -5,7 +5,6 @@ go 1.24.5
 require (
 	buf.build/gen/go/bufbuild/protovalidate/protocolbuffers/go v1.36.6-20250717165733-d22d418d82d8.1
 	buf.build/go/protovalidate v0.14.0
-	github.com/grpc-ecosystem/go-grpc-middleware v1.4.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1
 	github.com/vrischmann/envconfig v1.4.1

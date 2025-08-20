@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package vortech.stream_management.health;
 
+import "buf/validate/validate.proto";
 import "google/api/annotations.proto";
 import "google/protobuf/timestamp.proto";
 
@@ -16,7 +17,7 @@ service Health {
 }
 
 message GetStatusRequest {
-  string name = 1;
+  string name = 1 [(buf.validate.field).string.min_len = 1];
 }
 
 message GetStatusResponse {

@@ -44,3 +44,8 @@ message Logger {
   Level level = 1;
   bool pretty = 2;
 }
+
+message Token {
+  bool enabled = 1;
+
+}

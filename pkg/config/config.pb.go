@@ -381,6 +381,50 @@ func (x *Logger) GetPretty() bool {
 	return false
 }
 
+type Token struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Token) Reset() {
+	*x = Token{}
+	mi := &file_config_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Token) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Token) ProtoMessage() {}
+
+func (x *Token) ProtoReflect() protoreflect.Message {
+	mi := &file_config_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Token.ProtoReflect.Descriptor instead.
+func (*Token) Descriptor() ([]byte, []int) {
+	return file_config_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *Token) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
 var File_config_proto protoreflect.FileDescriptor
 
 const file_config_proto_rawDesc = "" +
@@ -411,7 +455,9 @@ const file_config_proto_rawDesc = "" +
 	"\x04WARN\x10\x03\x12\t\n" +
 	"\x05ERROR\x10\x04\x12\t\n" +
 	"\x05PANIC\x10\x05\x12\t\n" +
-	"\x05FATAL\x10\x06B\xe4\x01\n" +
+	"\x05FATAL\x10\x06\"!\n" +
+	"\x05Token\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabledB\xe4\x01\n" +
 	"$com.vortech.stream_management.configB\vConfigProtoP\x01Z\x11pkg/config;config\xa2\x02\x03VSC\xaa\x02\x1fVortech.StreamManagement.Config\xca\x02\x1fVortech\\StreamManagement\\Config\xe2\x02+Vortech\\StreamManagement\\Config\\GPBMetadata\xea\x02!Vortech::StreamManagement::Configb\x06proto3"
 
 var (
@@ -427,7 +473,7 @@ func file_config_proto_rawDescGZIP() []byte {
 }
 
 var file_config_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_config_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_config_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_config_proto_goTypes = []any{
 	(Logger_Level)(0),  // 0: vortech.stream_management.config.Logger.Level
 	(*Config)(nil),     // 1: vortech.stream_management.config.Config
@@ -435,6 +481,7 @@ var file_config_proto_goTypes = []any{
 	(*UnixSocket)(nil), // 3: vortech.stream_management.config.UnixSocket
 	(*Listener)(nil),   // 4: vortech.stream_management.config.Listener
 	(*Logger)(nil),     // 5: vortech.stream_management.config.Logger
+	(*Token)(nil),      // 6: vortech.stream_management.config.Token
 }
 var file_config_proto_depIdxs = []int32{
 	4, // 0: vortech.stream_management.config.Config.grpc_listener:type_name -> vortech.stream_management.config.Listener
@@ -465,7 +512,7 @@ func file_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_config_proto_rawDesc), len(file_config_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

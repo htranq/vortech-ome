@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package cas.table;
+
+option go_package = "pkg/cas/api/v1/table;table";
+
+service TableService {
+  rpc GetPlayBackUrl (GetPlayBackUrlRequest) returns (GetPlayBackUrlResponse);
+}
+message GetPlayBackUrlRequest {
+  string tableId = 1;
+}
+message GetPlayBackUrlResponse {
+  string playBackUrl = 1;
+}

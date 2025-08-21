@@ -31,6 +31,7 @@ const (
 // For internal, service to service
 type ManagementClient interface {
 	GetPlaybackUrl(ctx context.Context, in *GetPlaybackUrlRequest, opts ...grpc.CallOption) (*GetPlaybackUrlResponse, error)
+	// TODO only implementation when OME allow to terminate stream session
 	ExtendStreamToken(ctx context.Context, in *ExtendStreamTokenRequest, opts ...grpc.CallOption) (*ExtendStreamTokenResponse, error)
 	RevokeStreamToken(ctx context.Context, in *RevokeStreamTokenRequest, opts ...grpc.CallOption) (*RevokeStreamTokenResponse, error)
 }
@@ -80,6 +81,7 @@ func (c *managementClient) RevokeStreamToken(ctx context.Context, in *RevokeStre
 // For internal, service to service
 type ManagementServer interface {
 	GetPlaybackUrl(context.Context, *GetPlaybackUrlRequest) (*GetPlaybackUrlResponse, error)
+	// TODO only implementation when OME allow to terminate stream session
 	ExtendStreamToken(context.Context, *ExtendStreamTokenRequest) (*ExtendStreamTokenResponse, error)
 	RevokeStreamToken(context.Context, *RevokeStreamTokenRequest) (*RevokeStreamTokenResponse, error)
 	mustEmbedUnimplementedManagementServer()

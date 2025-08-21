@@ -3,27 +3,35 @@ package castable
 import (
 	"context"
 
+	"github.com/htranq/vortech-ome/internal/logging"
 	caspb "github.com/htranq/vortech-ome/pkg/cas/api/v1/table"
 	cascli "github.com/htranq/vortech-ome/pkg/cas/client"
+	configpb "github.com/htranq/vortech-ome/pkg/config"
 )
 
-type Castable interface {
+type CasTable interface {
 	GetPlaybackUrl(ctx context.Context, tableID string) (string, error)
 }
 
-type castable struct {
+type casTable struct {
+	cfg    *configpb.CasTable
 	client *cascli.TableClient
 }
 
-func New(client *cascli.TableClient) Castable {
-	if client == nil {
-		return &noop{}
+func New(cfg *configpb.CasTable) (CasTable, error) {
+	if !cfg.GetEnabled() {
+		logging.Logger(context.Background()).Info("CasTable disabled, init noop")
+		return &noop{}, nil
+	}
+	client, err := cascli.NewTableClient(cfg.GetSocket())
+	if err != nil {
+		return nil, err
 	}
 
-	return &castable{client: client}
+	return &casTable{client: client}, nil
 }
 
-func (c *castable) GetPlaybackUrl(ctx context.Context, tableID string) (string, error) {
+func (c *casTable) GetPlaybackUrl(ctx context.Context, tableID string) (string, error) {
 	resp, err := c.client.GetPlayBackUrl(ctx, &caspb.GetPlayBackUrlRequest{TableId: tableID})
 	if err != nil {
 		return "", err

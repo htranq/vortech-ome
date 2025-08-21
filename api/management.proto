@@ -11,7 +11,7 @@ option go_package = "api/v1/management;management";
 service Management {
   rpc GetPlaybackUrl(GetPlaybackUrlRequest) returns (GetPlaybackUrlResponse);
 
-  //
+  // TODO only implementation when OME allow to terminate stream session
   rpc ExtendStreamToken(ExtendStreamTokenRequest) returns (ExtendStreamTokenResponse);
   rpc RevokeStreamToken(RevokeStreamTokenRequest) returns (RevokeStreamTokenResponse);
 }
@@ -23,6 +23,9 @@ message GetPlaybackUrlRequest {
   // TODO consider using expires_at or ttl (expires_in, expiry_duration)
   // if nil then using default config (now + ttl)
   optional google.protobuf.Timestamp expires_at = 4;
+
+  // signature: SHA256, combine `timestamp|table_id|service_id|user_id`
+  Authorization authorization = 11 [(buf.validate.field).required = true];
 }
 
 message GetPlaybackUrlResponse {
@@ -50,4 +53,11 @@ message RevokeStreamTokenRequest {
 
 message RevokeStreamTokenResponse {
   string stream_token = 1;
+}
+
+message Authorization {
+  // generate HMAC-SHA256 (using secret key)
+  string signature = 1 [(buf.validate.field).string.min_len = 1];
+  // request time, validate within 5 mins
+  int64 timestamp = 2;
 }

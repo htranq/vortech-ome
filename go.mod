@@ -7,6 +7,7 @@ require (
 	buf.build/go/protovalidate v0.14.0
 	github.com/grpc-ecosystem/go-grpc-middleware/v2 v2.3.2
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.1
+	github.com/stretchr/testify v1.10.0
 	github.com/vrischmann/envconfig v1.4.1
 	go.uber.org/zap v1.27.0
 	google.golang.org/genproto/googleapis/api v0.0.0-20250818200422-3122310a409c
@@ -18,7 +19,9 @@ require (
 require (
 	cel.dev/expr v0.24.0 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
+	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/google/cel-go v0.26.0 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rogpeppe/go-internal v1.14.1 // indirect
 	github.com/stoewer/go-strcase v1.3.1 // indirect
 	go.uber.org/multierr v1.11.0 // indirect

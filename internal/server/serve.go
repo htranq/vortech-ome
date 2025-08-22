@@ -89,10 +89,28 @@ func serve(cfg *configpb.Config) {
 	// - ✅ Validation works
 	// - ✅ Consistent behavior with direct gRPC clients
 	//
-	// We chose Option 2 because interceptor consistency is more valuable than micro-performance
+	// other:
+	// Option 3: Native HTTP Handler (Direct Implementation) - MAXIMUM PERFORMANCE
+	// HTTP -> Your HTTP Handler (DIRECT - NO CONVERSION)
+	// - ✅ Fastest performance (~0.1ms latency, no conversion overhead)
+	// - ✅ Lowest memory usage (no protobuf conversion)
+	// - ✅ HTTP-specific features (streaming, custom headers, etc.)
+	// - ❌ Code duplication (separate HTTP and gRPC implementations)
+	// - ❌ Different validation logic needed
+	// - ❌ Different middleware/interceptor patterns
+	// - ❌ Inconsistent behavior between HTTP and gRPC clients
+	//
+	// Example implementation:
+	// service.HttpServerMux().HandleFunc("/v1/health/status", func(w http.ResponseWriter, r *http.Request) {
+	//     // Direct HTTP implementation - no gRPC conversion
+	//     response := &healthpb.GetStatusResponse{Status: "healthy"}
+	//     json.NewEncoder(w).Encode(response)
+	// })
+
 	grpcAddr := service.GrpcAddress()
 	dialOpts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
+	// With HealthServer, we chose Option 2 because interceptor consistency is more valuable than micro-performance
 	err := healthpb.RegisterHealthHandlerFromEndpoint(ctx, grpcGatewayMux, grpcAddr, dialOpts)
 	if err != nil {
 		logger.Fatal("could not register health http server", zap.Error(err))

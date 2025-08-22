@@ -7,14 +7,17 @@ import "buf/validate/validate.proto";
 option go_package = "pkg/config;config";
 
 message Config {
+  // for common
   Listener grpc_listener = 1 [(buf.validate.field).required = true];
   Listener http_listener = 2 [(buf.validate.field).required = true];
   Logger logger = 3 [(buf.validate.field).required = true];
 
-  Authorization authorization = 4 [(buf.validate.field).required = true];
+  // for inside
+  Authorization authorization = 11 [(buf.validate.field).required = true];
+  StreamToken stream_token = 12 [(buf.validate.field).required = true];
 
   // for outsider
-  CasTable cas_table = 11 [(buf.validate.field).required = true];
+  CasTable cas_table = 21 [(buf.validate.field).required = true];
 }
 
 message TCPSocket {
@@ -50,13 +53,18 @@ message Logger {
   bool pretty = 2;
 }
 
+message JwtSigning {
+
+}
+
 message Authorization {
   bool enabled = 1;
   string secret_key = 2;
 }
 
 message StreamToken {
-  bool enabled = 2;
+  bool enabled = 1;
+  JwtSigning jwt_signing = 2;
 }
 
 message CasTable {

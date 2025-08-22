@@ -16,6 +16,7 @@ type Service interface {
 	Logger() *zap.Logger
 	GrpcServer() *grpc.Server
 	HttpServerMux() *http.ServeMux
+	GrpcAddress() string
 	Serve()
 }
 
@@ -44,6 +45,10 @@ func (s *service) GrpcServer() *grpc.Server {
 
 func (s *service) HttpServerMux() *http.ServeMux {
 	return s.opts.HttpServerMux
+}
+
+func (s *service) GrpcAddress() string {
+	return s.opts.GrpcListener.Addr().String()
 }
 
 func (s *service) Options() Options {

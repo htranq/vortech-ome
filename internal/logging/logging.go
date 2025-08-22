@@ -5,15 +5,12 @@ import (
 	"fmt"
 
 	"go.uber.org/zap"
-	"google.golang.org/grpc/metadata"
 
+	"github.com/htranq/vortech-ome/internal/xcontext"
 	configpb "github.com/htranq/vortech-ome/pkg/config"
 )
 
-var (
-	_logger           = NewTmpLogger()
-	_xRequestIDHeader = "x-request-id"
-)
+var _logger = NewTmpLogger()
 
 func NewLogger(cfg *configpb.Logger) (*zap.Logger, error) {
 	var (
@@ -70,29 +67,14 @@ func Logger(ctx context.Context) *zap.Logger {
 	return lg
 }
 
-func SetXRequestIDHeader(headerName string) {
-	_xRequestIDHeader = headerName
-}
-
 func injectXRequestID(logger *zap.Logger, ctx context.Context) *zap.Logger {
 	if ctx == nil {
 		return logger
 	}
-	requestID := getRequestID(ctx)
+	requestID := xcontext.GetRequestID(ctx)
 	if requestID == "" {
 		return logger
 	}
-	return logger.With(zap.String(_xRequestIDHeader, requestID))
-}
 
-func getRequestID(ctx context.Context) string {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return ""
-	}
-	requestIds := md.Get(_xRequestIDHeader)
-	if len(requestIds) < 1 {
-		return ""
-	}
-	return requestIds[0]
+	return logger.With(zap.String(xcontext.XRequestIDHeader, requestID))
 }

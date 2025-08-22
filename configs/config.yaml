@@ -14,6 +14,13 @@ logger:
   pretty: true
   level: DEBUG
 
+authorization:
+  enabled: true
+  secret_key: my_secret_key # TODO setup in Vault
+
+stream_token:
+  enabled: true
+
 cas_table:
   enabled: true
   socket:

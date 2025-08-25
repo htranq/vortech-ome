@@ -409,9 +409,13 @@ func (x *Logger) GetPretty() bool {
 }
 
 type JwtSigning struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	PrivateKey      string                 `protobuf:"bytes,1,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
+	Issuer          string                 `protobuf:"bytes,2,opt,name=issuer,proto3" json:"issuer,omitempty"`
+	DefaultAudience string                 `protobuf:"bytes,3,opt,name=default_audience,json=defaultAudience,proto3" json:"default_audience,omitempty"`
+	ExpiresTime     int64                  `protobuf:"varint,4,opt,name=expires_time,json=expiresTime,proto3" json:"expires_time,omitempty"` // in milliseconds
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *JwtSigning) Reset() {
@@ -442,6 +446,34 @@ func (x *JwtSigning) ProtoReflect() protoreflect.Message {
 // Deprecated: Use JwtSigning.ProtoReflect.Descriptor instead.
 func (*JwtSigning) Descriptor() ([]byte, []int) {
 	return file_config_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *JwtSigning) GetPrivateKey() string {
+	if x != nil {
+		return x.PrivateKey
+	}
+	return ""
+}
+
+func (x *JwtSigning) GetIssuer() string {
+	if x != nil {
+		return x.Issuer
+	}
+	return ""
+}
+
+func (x *JwtSigning) GetDefaultAudience() string {
+	if x != nil {
+		return x.DefaultAudience
+	}
+	return ""
+}
+
+func (x *JwtSigning) GetExpiresTime() int64 {
+	if x != nil {
+		return x.ExpiresTime
+	}
+	return 0
 }
 
 type Authorization struct {
@@ -633,9 +665,14 @@ const file_config_proto_rawDesc = "" +
 	"\x04WARN\x10\x03\x12\t\n" +
 	"\x05ERROR\x10\x04\x12\t\n" +
 	"\x05PANIC\x10\x05\x12\t\n" +
-	"\x05FATAL\x10\x06\"\f\n" +
+	"\x05FATAL\x10\x06\"\xa5\x01\n" +
 	"\n" +
-	"JwtSigning\"H\n" +
+	"JwtSigning\x12(\n" +
+	"\vprivate_key\x18\x01 \x01(\tB\a\xbaH\x04r\x02 \x01R\n" +
+	"privateKey\x12\x1f\n" +
+	"\x06issuer\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06issuer\x12)\n" +
+	"\x10default_audience\x18\x03 \x01(\tR\x0fdefaultAudience\x12!\n" +
+	"\fexpires_time\x18\x04 \x01(\x03R\vexpiresTime\"H\n" +
 	"\rAuthorization\x12\x18\n" +
 	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x1d\n" +
 	"\n" +

@@ -54,7 +54,10 @@ message Logger {
 }
 
 message JwtSigning {
-
+  string private_key = 1 [(buf.validate.field).string = {min_bytes : 1}];
+  string issuer = 2 [(buf.validate.field).string.min_len = 1];
+  string default_audience = 3;
+  int64 expires_time = 4; // in milliseconds
 }
 
 message Authorization {

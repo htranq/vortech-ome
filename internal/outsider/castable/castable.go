@@ -13,7 +13,7 @@ type CasTable interface {
 	GetPlaybackUrl(ctx context.Context, tableID string) (string, error)
 }
 
-type casTable struct {
+type casTableImpl struct {
 	cfg    *configpb.CasTable
 	client *cascli.TableClient
 }
@@ -28,10 +28,10 @@ func New(cfg *configpb.CasTable) (CasTable, error) {
 		return nil, err
 	}
 
-	return &casTable{client: client}, nil
+	return &casTableImpl{client: client}, nil
 }
 
-func (c *casTable) GetPlaybackUrl(ctx context.Context, tableID string) (string, error) {
+func (c *casTableImpl) GetPlaybackUrl(ctx context.Context, tableID string) (string, error) {
 	resp, err := c.client.GetPlayBackUrl(ctx, &caspb.GetPlayBackUrlRequest{TableId: tableID})
 	if err != nil {
 		return "", err

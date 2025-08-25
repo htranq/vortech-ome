@@ -23,7 +23,7 @@ stream_token:
   enabled: true
   jwt_signing:
     # TODO setup in Vault/SecretManager
-    private_key:
+    private_key: "-----BEGIN PRIVATE KEY-----\nMC4CAQAwBQYDK2VwBCIEIBPxxlFTu0gY2Y9nlXqer3RbdXY2/y1U9odS2JeYLs1r\n-----END PRIVATE KEY-----"
     issuer: stream_management
     default_audience: my_ome
     expires_time: 120000 # 2 minutes in milliseconds

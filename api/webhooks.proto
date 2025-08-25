@@ -11,7 +11,10 @@ option go_package = "api/v1/webhooks;webhooks";
 service Webhooks {
   // Get the current status of the stream management service.
   rpc Admission(AdmissionRequest) returns (AdmissionResponse) {
-    option (google.api.http) = {post: "/v1/admission"};
+    option (google.api.http) = {
+      post: "/v1/admission"
+      body: "*"
+    };
   }
 }
 
@@ -68,6 +71,7 @@ message RequestInfo {
     (buf.validate.field).string.in = "srt",
     (buf.validate.field).string.in = "llhls",
     (buf.validate.field).string.in = "thumbnail"
+    // TODO add more for uppercases
   ];
 
   // request status: opening or closing

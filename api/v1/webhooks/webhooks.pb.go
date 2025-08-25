@@ -338,9 +338,9 @@ const file_webhooks_proto_rawDesc = "" +
 	"\x03url\x18\x04 \x01(\tB\n" +
 	"\xbaH\ar\x05\x10\x01\x88\x01\x01R\x03url\x12\x17\n" +
 	"\anew_url\x18\x05 \x01(\tR\x06newUrl\x12\x12\n" +
-	"\x04time\x18\x06 \x01(\tR\x04time2\x9c\x01\n" +
-	"\bWebhooks\x12\x8f\x01\n" +
-	"\tAdmission\x124.vortech.stream_management.webhooks.AdmissionRequest\x1a5.vortech.stream_management.webhooks.AdmissionResponse\"\x15\x82\xd3\xe4\x93\x02\x0f\"\r/v1/admissionB\xf7\x01\n" +
+	"\x04time\x18\x06 \x01(\tR\x04time2\x9f\x01\n" +
+	"\bWebhooks\x12\x92\x01\n" +
+	"\tAdmission\x124.vortech.stream_management.webhooks.AdmissionRequest\x1a5.vortech.stream_management.webhooks.AdmissionResponse\"\x18\x82\xd3\xe4\x93\x02\x12:\x01*\"\r/v1/admissionB\xf7\x01\n" +
 	"&com.vortech.stream_management.webhooksB\rWebhooksProtoP\x01Z\x18api/v1/webhooks;webhooks\xa2\x02\x03VSW\xaa\x02!Vortech.StreamManagement.Webhooks\xca\x02!Vortech\\StreamManagement\\Webhooks\xe2\x02-Vortech\\StreamManagement\\Webhooks\\GPBMetadata\xea\x02#Vortech::StreamManagement::Webhooksb\x06proto3"
 
 var (

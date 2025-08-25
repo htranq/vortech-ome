@@ -39,11 +39,11 @@ sequenceDiagram
   participant CAS
   autonumber
   Client->>+GameServer: Join Game
-  GameServer ->>+StreamMgnt: Get PlaybackURL (gRPC) <br/> Input: user_access_token, table_id
-  StreamMgnt ->>+CAS: Get BaseURL (gRPC) <br/> by table_id
-  CAS -->>-StreamMgnt: return
+  GameServer->>+StreamMgnt: Get PlaybackURL (gRPC) <br/> Input: user_access_token, table_id
+  StreamMgnt->>+CAS: Get BaseURL (gRPC) <br/> by table_id
+  CAS-->>-StreamMgnt: return
   note right of StreamMgnt: build PlaybackURL by BaseURL <br/> and stream_token (generated)
-  StreamMgnt -->>-GameServer: return PlaybackURL <br/> with stream_token
+  StreamMgnt-->>-GameServer: return PlaybackURL <br/> with stream_token
   GameServer-->>-Client: return data include <br/> PlaybackURL
 
 
@@ -52,10 +52,10 @@ sequenceDiagram
   note right of StreamMgnt: verify the stream_token <br/> in PlaybackURL
   alt allow to play
   StreamMgnt-->>OME: Allow
-  OME <<-->>Client: Init succeed and playing the stream
+  OME<<-->>Client: Init succeed and playing the stream
   else reject
   StreamMgnt-->>-OME: Reject
-  OME <<-->>-Client: return error
+  OME<<-->>-Client: return error
   end
 ```
 
@@ -169,10 +169,9 @@ curl --location 'http://localhost:8081/v1/health/status?name=Lucas%20HTTP' \
 
 gRPC:
 ```bash
-grpcurl -insecure \
-  -d '{"name":"Lucas GRPC"}' \
+grpcurl -plaintext -d '{"name":"Lucas GRPC"}' \
   localhost:8080 \
-  vortex.stream_management.health.Health/GetStatus
+  vortech.stream_management.health.Health/GetStatus
 ```
 
 #### Step 2: Run OME Origin
@@ -219,33 +218,49 @@ This configuration ensures OME Origin will validate stream access through the St
      noop_default_playback_url: ws://localhost:3333/app/baccarat
    ```
 
-   The base playback URL uses `noop_default_playback_url` from config. To generate a complete playback URL with stream token, follow these 2 steps:
+     The base playback URL uses `noop_default_playback_url` from config. To generate a complete playback URL with stream token, you have two options:
 
-   **Step 2a: Generate signature and timestamp**
-   ```bash
-   go run ./scripts/auth/main.go
-   ```
+  **Option A: Use the Management Script (Recommended)**
+  ```bash
+  # Make direct gRPC call to GetPlaybackUrl service
+  go run ./scripts/management/main.go
 
-   **Step 2b: Call Management service to get playback URL**
-   ```bash
-   grpcurl -insecure \
-     -d '{
-       "table_id": "baccarat",
-       "service_id": "demo_service",
-       "user_id": "demo_user",
-       "authorization": {
-         "signature": "<signature_from_step_2a>",
-         "timestamp": <timestamp_from_step_2a>
-       }
-     }' \
-     localhost:8080 \
-     vortech.stream_management.management.Management/GetPlaybackUrl
-   ```
+  # With custom parameters
+  go run ./scripts/management/main.go -table "baccarat_table" -user "player123"
+  go run ./scripts/management/main.go -addr "localhost:9090" -service "live_stream"
 
-   This will return a playback URL in format:
-   ```
-   ws://localhost:3333/app/baccarat?stream_token=xxx
-   ```
+  # See all available flags
+  go run ./scripts/management/main.go -h
+  ```
+
+  This script will:
+  - Generate proper authorization signatures automatically
+  - Make the gRPC call directly to the Management service
+  - Display the complete playback URL with stream token
+  - Show equivalent grpcurl command for reference
+
+  **Option B: Manual Steps (2a + 2b)**
+
+  2a. **Generate signature:**
+  ```bash
+  # This script will generate the signature and provide the complete grpcurl command
+  go run ./scripts/auth/main.go
+  ```
+
+  2b. **Call Management service:**
+  The auth script will output the grpcurl command with the correct signature and timestamp. Simply copy and run the generated command.
+
+  **Both options will return a playback URL in format:**
+  ```
+  ws://localhost:3333/app/baccarat?stream_token=xxx
+  ```
+
+  Example output:
+  ```
+  ✅ Success! Response received:
+    url: ws://localhost:3333/app/baccarat?stream_token=eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9...
+    stream_token: eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9...
+  ```
 
 3. **View the Stream:**
    - Open [demo.ovenplayer.com](https://demo.ovenplayer.com)

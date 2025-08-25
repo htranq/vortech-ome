@@ -24,10 +24,11 @@ const (
 )
 
 type GetPlaybackUrlRequest struct {
-	state     protoimpl.MessageState `protogen:"open.v1"`
-	TableId   string                 `protobuf:"bytes,1,opt,name=table_id,json=tableId,proto3" json:"table_id,omitempty"`
-	ServiceId string                 `protobuf:"bytes,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
-	UserId    string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	TableId string                 `protobuf:"bytes,1,opt,name=table_id,json=tableId,proto3" json:"table_id,omitempty"`
+	// TODO could remove if OME not allow to terminate stream session
+	ServiceId string `protobuf:"bytes,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"`
+	UserId    string `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	// TODO consider using expires_at or ttl (expires_in, expiry_duration)
 	// if nil then using default config (now + ttl)
 	ExpiresAt *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=expires_at,json=expiresAt,proto3,oneof" json:"expires_at,omitempty"`

@@ -45,8 +45,9 @@ func serve(cfg *configpb.Config) {
 		service = newService(cfg)
 		logger  = service.Logger()
 	)
-
+	logger.Info("starting server", zap.Any("config", cfg))
 	logger.Info("init internal services")
+
 	authorization, err := authorizationsv.New(cfg.GetAuthorization())
 	if err != nil {
 		logger.Fatal("failed to create authorization", zap.Error(err))
@@ -62,8 +63,6 @@ func serve(cfg *configpb.Config) {
 	if err != nil {
 		logger.Fatal("failed to create outsider", zap.Error(err))
 	}
-
-	logger.Info("starting server", zap.Any("config", cfg))
 
 	// init server handlers
 	var (
@@ -82,7 +81,7 @@ func serve(cfg *configpb.Config) {
 		runtime.WithMarshalerOption(runtime.MIMEWildcard, &runtime.JSONPb{
 			MarshalOptions: protojson.MarshalOptions{
 				UseProtoNames:   true,
-				EmitUnpopulated: true,
+				EmitUnpopulated: false,
 				UseEnumNumbers:  false,
 			},
 		}),

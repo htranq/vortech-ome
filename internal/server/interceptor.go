@@ -32,7 +32,7 @@ func executionInterceptor(ctx context.Context, req any, info *grpc.UnaryServerIn
 	duration := time.Since(start)
 	logging.Logger(ctx).Info("GRPC handled",
 		zap.String("method", info.FullMethod),
-		zap.Duration("duration", duration),
+		zap.Int64("duration_ms", duration.Milliseconds()),
 		zap.Int64("duration_ns", duration.Nanoseconds()))
 
 	return resp, err
@@ -64,7 +64,7 @@ func executionMiddleware(next runtime.HandlerFunc) runtime.HandlerFunc {
 		logging.Logger(ctx).Info("HTTP handled",
 			zap.String("method", r.Method),
 			zap.String("path", r.URL.Path),
-			zap.Duration("duration", duration),
+			zap.Int64("duration_ms", duration.Milliseconds()),
 			zap.Int64("duration_ns", duration.Nanoseconds()))
 	}
 }

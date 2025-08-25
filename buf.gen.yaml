@@ -1,0 +1,16 @@
+version: v2
+inputs:
+  - directory: api
+  - directory: pkg/cas/api
+plugins:
+  - remote: buf.build/protocolbuffers/go:v1.36.7
+    out: .
+  - remote: buf.build/grpc/go:v1.5.1
+    out: .
+  - remote: buf.build/grpc-ecosystem/gateway:v2.27.1
+    out: .
+managed:
+  enabled: true
+  disable:
+    - file_option: go_package
+      module: buf.build/bufbuild/protovalidate:v0.14.2

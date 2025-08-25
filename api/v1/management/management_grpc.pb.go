@@ -19,15 +19,21 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	Management_GetStatus_FullMethodName = "/vortech.stream_management.management.Management/GetStatus"
+	Management_GetPlaybackUrl_FullMethodName    = "/vortech.stream_management.management.Management/GetPlaybackUrl"
+	Management_ExtendStreamToken_FullMethodName = "/vortech.stream_management.management.Management/ExtendStreamToken"
+	Management_RevokeStreamToken_FullMethodName = "/vortech.stream_management.management.Management/RevokeStreamToken"
 )
 
 // ManagementClient is the client API for Management service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+//
+// For internal, service to service
 type ManagementClient interface {
-	// Get the current status of the stream management service.
-	GetStatus(ctx context.Context, in *GetStatusRequest, opts ...grpc.CallOption) (*GetStatusReply, error)
+	GetPlaybackUrl(ctx context.Context, in *GetPlaybackUrlRequest, opts ...grpc.CallOption) (*GetPlaybackUrlResponse, error)
+	// TODO only implementation when OME allow to terminate stream session
+	ExtendStreamToken(ctx context.Context, in *ExtendStreamTokenRequest, opts ...grpc.CallOption) (*ExtendStreamTokenResponse, error)
+	RevokeStreamToken(ctx context.Context, in *RevokeStreamTokenRequest, opts ...grpc.CallOption) (*RevokeStreamTokenResponse, error)
 }
 
 type managementClient struct {
@@ -38,10 +44,30 @@ func NewManagementClient(cc grpc.ClientConnInterface) ManagementClient {
 	return &managementClient{cc}
 }
 
-func (c *managementClient) GetStatus(ctx context.Context, in *GetStatusRequest, opts ...grpc.CallOption) (*GetStatusReply, error) {
+func (c *managementClient) GetPlaybackUrl(ctx context.Context, in *GetPlaybackUrlRequest, opts ...grpc.CallOption) (*GetPlaybackUrlResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetStatusReply)
-	err := c.cc.Invoke(ctx, Management_GetStatus_FullMethodName, in, out, cOpts...)
+	out := new(GetPlaybackUrlResponse)
+	err := c.cc.Invoke(ctx, Management_GetPlaybackUrl_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *managementClient) ExtendStreamToken(ctx context.Context, in *ExtendStreamTokenRequest, opts ...grpc.CallOption) (*ExtendStreamTokenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ExtendStreamTokenResponse)
+	err := c.cc.Invoke(ctx, Management_ExtendStreamToken_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *managementClient) RevokeStreamToken(ctx context.Context, in *RevokeStreamTokenRequest, opts ...grpc.CallOption) (*RevokeStreamTokenResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RevokeStreamTokenResponse)
+	err := c.cc.Invoke(ctx, Management_RevokeStreamToken_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,9 +77,13 @@ func (c *managementClient) GetStatus(ctx context.Context, in *GetStatusRequest, 
 // ManagementServer is the server API for Management service.
 // All implementations must embed UnimplementedManagementServer
 // for forward compatibility.
+//
+// For internal, service to service
 type ManagementServer interface {
-	// Get the current status of the stream management service.
-	GetStatus(context.Context, *GetStatusRequest) (*GetStatusReply, error)
+	GetPlaybackUrl(context.Context, *GetPlaybackUrlRequest) (*GetPlaybackUrlResponse, error)
+	// TODO only implementation when OME allow to terminate stream session
+	ExtendStreamToken(context.Context, *ExtendStreamTokenRequest) (*ExtendStreamTokenResponse, error)
+	RevokeStreamToken(context.Context, *RevokeStreamTokenRequest) (*RevokeStreamTokenResponse, error)
 	mustEmbedUnimplementedManagementServer()
 }
 
@@ -64,8 +94,14 @@ type ManagementServer interface {
 // pointer dereference when methods are called.
 type UnimplementedManagementServer struct{}
 
-func (UnimplementedManagementServer) GetStatus(context.Context, *GetStatusRequest) (*GetStatusReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetStatus not implemented")
+func (UnimplementedManagementServer) GetPlaybackUrl(context.Context, *GetPlaybackUrlRequest) (*GetPlaybackUrlResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetPlaybackUrl not implemented")
+}
+func (UnimplementedManagementServer) ExtendStreamToken(context.Context, *ExtendStreamTokenRequest) (*ExtendStreamTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExtendStreamToken not implemented")
+}
+func (UnimplementedManagementServer) RevokeStreamToken(context.Context, *RevokeStreamTokenRequest) (*RevokeStreamTokenResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeStreamToken not implemented")
 }
 func (UnimplementedManagementServer) mustEmbedUnimplementedManagementServer() {}
 func (UnimplementedManagementServer) testEmbeddedByValue()                    {}
@@ -88,20 +124,56 @@ func RegisterManagementServer(s grpc.ServiceRegistrar, srv ManagementServer) {
 	s.RegisterService(&Management_ServiceDesc, srv)
 }
 
-func _Management_GetStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetStatusRequest)
+func _Management_GetPlaybackUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPlaybackUrlRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ManagementServer).GetStatus(ctx, in)
+		return srv.(ManagementServer).GetPlaybackUrl(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: Management_GetStatus_FullMethodName,
+		FullMethod: Management_GetPlaybackUrl_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ManagementServer).GetStatus(ctx, req.(*GetStatusRequest))
+		return srv.(ManagementServer).GetPlaybackUrl(ctx, req.(*GetPlaybackUrlRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Management_ExtendStreamToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExtendStreamTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ManagementServer).ExtendStreamToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Management_ExtendStreamToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ManagementServer).ExtendStreamToken(ctx, req.(*ExtendStreamTokenRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Management_RevokeStreamToken_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RevokeStreamTokenRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ManagementServer).RevokeStreamToken(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Management_RevokeStreamToken_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ManagementServer).RevokeStreamToken(ctx, req.(*RevokeStreamTokenRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -114,8 +186,16 @@ var Management_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*ManagementServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "GetStatus",
-			Handler:    _Management_GetStatus_Handler,
+			MethodName: "GetPlaybackUrl",
+			Handler:    _Management_GetPlaybackUrl_Handler,
+		},
+		{
+			MethodName: "ExtendStreamToken",
+			Handler:    _Management_ExtendStreamToken_Handler,
+		},
+		{
+			MethodName: "RevokeStreamToken",
+			Handler:    _Management_RevokeStreamToken_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -84,10 +84,16 @@ func (Logger_Level) EnumDescriptor() ([]byte, []int) {
 }
 
 type Config struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	GrpcListener  *Listener              `protobuf:"bytes,1,opt,name=grpc_listener,json=grpcListener,proto3" json:"grpc_listener,omitempty"`
-	HttpListener  *Listener              `protobuf:"bytes,2,opt,name=http_listener,json=httpListener,proto3" json:"http_listener,omitempty"`
-	Logger        *Logger                `protobuf:"bytes,3,opt,name=logger,proto3" json:"logger,omitempty"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// for common
+	GrpcListener *Listener `protobuf:"bytes,1,opt,name=grpc_listener,json=grpcListener,proto3" json:"grpc_listener,omitempty"`
+	HttpListener *Listener `protobuf:"bytes,2,opt,name=http_listener,json=httpListener,proto3" json:"http_listener,omitempty"`
+	Logger       *Logger   `protobuf:"bytes,3,opt,name=logger,proto3" json:"logger,omitempty"`
+	// for inside
+	Authorization *Authorization `protobuf:"bytes,11,opt,name=authorization,proto3" json:"authorization,omitempty"`
+	StreamToken   *StreamToken   `protobuf:"bytes,12,opt,name=stream_token,json=streamToken,proto3" json:"stream_token,omitempty"`
+	// for outsider
+	CasTable      *CasTable `protobuf:"bytes,21,opt,name=cas_table,json=casTable,proto3" json:"cas_table,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -139,6 +145,27 @@ func (x *Config) GetHttpListener() *Listener {
 func (x *Config) GetLogger() *Logger {
 	if x != nil {
 		return x.Logger
+	}
+	return nil
+}
+
+func (x *Config) GetAuthorization() *Authorization {
+	if x != nil {
+		return x.Authorization
+	}
+	return nil
+}
+
+func (x *Config) GetStreamToken() *StreamToken {
+	if x != nil {
+		return x.StreamToken
+	}
+	return nil
+}
+
+func (x *Config) GetCasTable() *CasTable {
+	if x != nil {
+		return x.CasTable
 	}
 	return nil
 }
@@ -381,26 +408,261 @@ func (x *Logger) GetPretty() bool {
 	return false
 }
 
+type JwtSigning struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	PrivateKey      string                 `protobuf:"bytes,1,opt,name=private_key,json=privateKey,proto3" json:"private_key,omitempty"`
+	Issuer          string                 `protobuf:"bytes,2,opt,name=issuer,proto3" json:"issuer,omitempty"`
+	DefaultAudience string                 `protobuf:"bytes,3,opt,name=default_audience,json=defaultAudience,proto3" json:"default_audience,omitempty"`
+	ExpiresTime     int64                  `protobuf:"varint,4,opt,name=expires_time,json=expiresTime,proto3" json:"expires_time,omitempty"` // in milliseconds
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *JwtSigning) Reset() {
+	*x = JwtSigning{}
+	mi := &file_config_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *JwtSigning) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*JwtSigning) ProtoMessage() {}
+
+func (x *JwtSigning) ProtoReflect() protoreflect.Message {
+	mi := &file_config_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use JwtSigning.ProtoReflect.Descriptor instead.
+func (*JwtSigning) Descriptor() ([]byte, []int) {
+	return file_config_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *JwtSigning) GetPrivateKey() string {
+	if x != nil {
+		return x.PrivateKey
+	}
+	return ""
+}
+
+func (x *JwtSigning) GetIssuer() string {
+	if x != nil {
+		return x.Issuer
+	}
+	return ""
+}
+
+func (x *JwtSigning) GetDefaultAudience() string {
+	if x != nil {
+		return x.DefaultAudience
+	}
+	return ""
+}
+
+func (x *JwtSigning) GetExpiresTime() int64 {
+	if x != nil {
+		return x.ExpiresTime
+	}
+	return 0
+}
+
+type Authorization struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	SecretKey     string                 `protobuf:"bytes,2,opt,name=secret_key,json=secretKey,proto3" json:"secret_key,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Authorization) Reset() {
+	*x = Authorization{}
+	mi := &file_config_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Authorization) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Authorization) ProtoMessage() {}
+
+func (x *Authorization) ProtoReflect() protoreflect.Message {
+	mi := &file_config_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Authorization.ProtoReflect.Descriptor instead.
+func (*Authorization) Descriptor() ([]byte, []int) {
+	return file_config_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *Authorization) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *Authorization) GetSecretKey() string {
+	if x != nil {
+		return x.SecretKey
+	}
+	return ""
+}
+
+type StreamToken struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	JwtSigning    *JwtSigning            `protobuf:"bytes,2,opt,name=jwt_signing,json=jwtSigning,proto3" json:"jwt_signing,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StreamToken) Reset() {
+	*x = StreamToken{}
+	mi := &file_config_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StreamToken) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StreamToken) ProtoMessage() {}
+
+func (x *StreamToken) ProtoReflect() protoreflect.Message {
+	mi := &file_config_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StreamToken.ProtoReflect.Descriptor instead.
+func (*StreamToken) Descriptor() ([]byte, []int) {
+	return file_config_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *StreamToken) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *StreamToken) GetJwtSigning() *JwtSigning {
+	if x != nil {
+		return x.JwtSigning
+	}
+	return nil
+}
+
+type CasTable struct {
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	Enabled                bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Socket                 *TCPSocket             `protobuf:"bytes,2,opt,name=socket,proto3" json:"socket,omitempty"`
+	NoopDefaultPlaybackUrl string                 `protobuf:"bytes,3,opt,name=noop_default_playback_url,json=noopDefaultPlaybackUrl,proto3" json:"noop_default_playback_url,omitempty"` // in case disabled
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
+}
+
+func (x *CasTable) Reset() {
+	*x = CasTable{}
+	mi := &file_config_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CasTable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CasTable) ProtoMessage() {}
+
+func (x *CasTable) ProtoReflect() protoreflect.Message {
+	mi := &file_config_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CasTable.ProtoReflect.Descriptor instead.
+func (*CasTable) Descriptor() ([]byte, []int) {
+	return file_config_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *CasTable) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
+func (x *CasTable) GetSocket() *TCPSocket {
+	if x != nil {
+		return x.Socket
+	}
+	return nil
+}
+
+func (x *CasTable) GetNoopDefaultPlaybackUrl() string {
+	if x != nil {
+		return x.NoopDefaultPlaybackUrl
+	}
+	return ""
+}
+
 var File_config_proto protoreflect.FileDescriptor
 
 const file_config_proto_rawDesc = "" +
 	"\n" +
-	"\fconfig.proto\x12 vortech.stream_management.config\x1a\x1bbuf/validate/validate.proto\"\x84\x02\n" +
+	"\fconfig.proto\x12 vortech.stream_management.config\x1a\x1bbuf/validate/validate.proto\"\x8e\x04\n" +
 	"\x06Config\x12W\n" +
 	"\rgrpc_listener\x18\x01 \x01(\v2*.vortech.stream_management.config.ListenerB\x06\xbaH\x03\xc8\x01\x01R\fgrpcListener\x12W\n" +
 	"\rhttp_listener\x18\x02 \x01(\v2*.vortech.stream_management.config.ListenerB\x06\xbaH\x03\xc8\x01\x01R\fhttpListener\x12H\n" +
-	"\x06logger\x18\x03 \x01(\v2(.vortech.stream_management.config.LoggerB\x06\xbaH\x03\xc8\x01\x01R\x06logger\"Q\n" +
+	"\x06logger\x18\x03 \x01(\v2(.vortech.stream_management.config.LoggerB\x06\xbaH\x03\xc8\x01\x01R\x06logger\x12]\n" +
+	"\rauthorization\x18\v \x01(\v2/.vortech.stream_management.config.AuthorizationB\x06\xbaH\x03\xc8\x01\x01R\rauthorization\x12X\n" +
+	"\fstream_token\x18\f \x01(\v2-.vortech.stream_management.config.StreamTokenB\x06\xbaH\x03\xc8\x01\x01R\vstreamToken\x12O\n" +
+	"\tcas_table\x18\x15 \x01(\v2*.vortech.stream_management.config.CasTableB\x06\xbaH\x03\xc8\x01\x01R\bcasTable\"Q\n" +
 	"\tTCPSocket\x12\x18\n" +
 	"\aaddress\x18\x01 \x01(\tR\aaddress\x12\x12\n" +
 	"\x04port\x18\x02 \x01(\rR\x04port\x12\x16\n" +
 	"\x06secure\x18\x03 \x01(\bR\x06secure\" \n" +
 	"\n" +
 	"UnixSocket\x12\x12\n" +
-	"\x04path\x18\x01 \x01(\tR\x04path\"\x99\x01\n" +
+	"\x04path\x18\x01 \x01(\tR\x04path\"\xa0\x01\n" +
 	"\bListener\x12?\n" +
 	"\x03tcp\x18\x01 \x01(\v2+.vortech.stream_management.config.TCPSocketH\x00R\x03tcp\x12B\n" +
-	"\x04unix\x18\x02 \x01(\v2,.vortech.stream_management.config.UnixSocketH\x00R\x04unixB\b\n" +
-	"\x06socket\"\xc0\x01\n" +
+	"\x04unix\x18\x02 \x01(\v2,.vortech.stream_management.config.UnixSocketH\x00R\x04unixB\x0f\n" +
+	"\x06socket\x12\x05\xbaH\x02\b\x01\"\xc0\x01\n" +
 	"\x06Logger\x12D\n" +
 	"\x05level\x18\x01 \x01(\x0e2..vortech.stream_management.config.Logger.LevelR\x05level\x12\x16\n" +
 	"\x06pretty\x18\x02 \x01(\bR\x06pretty\"X\n" +
@@ -411,7 +673,27 @@ const file_config_proto_rawDesc = "" +
 	"\x04WARN\x10\x03\x12\t\n" +
 	"\x05ERROR\x10\x04\x12\t\n" +
 	"\x05PANIC\x10\x05\x12\t\n" +
-	"\x05FATAL\x10\x06B\x13Z\x11pkg/config;configb\x06proto3"
+	"\x05FATAL\x10\x06\"\xa5\x01\n" +
+	"\n" +
+	"JwtSigning\x12(\n" +
+	"\vprivate_key\x18\x01 \x01(\tB\a\xbaH\x04r\x02 \x01R\n" +
+	"privateKey\x12\x1f\n" +
+	"\x06issuer\x18\x02 \x01(\tB\a\xbaH\x04r\x02\x10\x01R\x06issuer\x12)\n" +
+	"\x10default_audience\x18\x03 \x01(\tR\x0fdefaultAudience\x12!\n" +
+	"\fexpires_time\x18\x04 \x01(\x03R\vexpiresTime\"H\n" +
+	"\rAuthorization\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12\x1d\n" +
+	"\n" +
+	"secret_key\x18\x02 \x01(\tR\tsecretKey\"v\n" +
+	"\vStreamToken\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12M\n" +
+	"\vjwt_signing\x18\x02 \x01(\v2,.vortech.stream_management.config.JwtSigningR\n" +
+	"jwtSigning\"\xac\x01\n" +
+	"\bCasTable\x12\x18\n" +
+	"\aenabled\x18\x01 \x01(\bR\aenabled\x12K\n" +
+	"\x06socket\x18\x02 \x01(\v2+.vortech.stream_management.config.TCPSocketB\x06\xbaH\x03\xc8\x01\x01R\x06socket\x129\n" +
+	"\x19noop_default_playback_url\x18\x03 \x01(\tR\x16noopDefaultPlaybackUrlB\xe4\x01\n" +
+	"$com.vortech.stream_management.configB\vConfigProtoP\x01Z\x11pkg/config;config\xa2\x02\x03VSC\xaa\x02\x1fVortech.StreamManagement.Config\xca\x02\x1fVortech\\StreamManagement\\Config\xe2\x02+Vortech\\StreamManagement\\Config\\GPBMetadata\xea\x02!Vortech::StreamManagement::Configb\x06proto3"
 
 var (
 	file_config_proto_rawDescOnce sync.Once
@@ -426,27 +708,36 @@ func file_config_proto_rawDescGZIP() []byte {
 }
 
 var file_config_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_config_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_config_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_config_proto_goTypes = []any{
-	(Logger_Level)(0),  // 0: vortech.stream_management.config.Logger.Level
-	(*Config)(nil),     // 1: vortech.stream_management.config.Config
-	(*TCPSocket)(nil),  // 2: vortech.stream_management.config.TCPSocket
-	(*UnixSocket)(nil), // 3: vortech.stream_management.config.UnixSocket
-	(*Listener)(nil),   // 4: vortech.stream_management.config.Listener
-	(*Logger)(nil),     // 5: vortech.stream_management.config.Logger
+	(Logger_Level)(0),     // 0: vortech.stream_management.config.Logger.Level
+	(*Config)(nil),        // 1: vortech.stream_management.config.Config
+	(*TCPSocket)(nil),     // 2: vortech.stream_management.config.TCPSocket
+	(*UnixSocket)(nil),    // 3: vortech.stream_management.config.UnixSocket
+	(*Listener)(nil),      // 4: vortech.stream_management.config.Listener
+	(*Logger)(nil),        // 5: vortech.stream_management.config.Logger
+	(*JwtSigning)(nil),    // 6: vortech.stream_management.config.JwtSigning
+	(*Authorization)(nil), // 7: vortech.stream_management.config.Authorization
+	(*StreamToken)(nil),   // 8: vortech.stream_management.config.StreamToken
+	(*CasTable)(nil),      // 9: vortech.stream_management.config.CasTable
 }
 var file_config_proto_depIdxs = []int32{
-	4, // 0: vortech.stream_management.config.Config.grpc_listener:type_name -> vortech.stream_management.config.Listener
-	4, // 1: vortech.stream_management.config.Config.http_listener:type_name -> vortech.stream_management.config.Listener
-	5, // 2: vortech.stream_management.config.Config.logger:type_name -> vortech.stream_management.config.Logger
-	2, // 3: vortech.stream_management.config.Listener.tcp:type_name -> vortech.stream_management.config.TCPSocket
-	3, // 4: vortech.stream_management.config.Listener.unix:type_name -> vortech.stream_management.config.UnixSocket
-	0, // 5: vortech.stream_management.config.Logger.level:type_name -> vortech.stream_management.config.Logger.Level
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	4,  // 0: vortech.stream_management.config.Config.grpc_listener:type_name -> vortech.stream_management.config.Listener
+	4,  // 1: vortech.stream_management.config.Config.http_listener:type_name -> vortech.stream_management.config.Listener
+	5,  // 2: vortech.stream_management.config.Config.logger:type_name -> vortech.stream_management.config.Logger
+	7,  // 3: vortech.stream_management.config.Config.authorization:type_name -> vortech.stream_management.config.Authorization
+	8,  // 4: vortech.stream_management.config.Config.stream_token:type_name -> vortech.stream_management.config.StreamToken
+	9,  // 5: vortech.stream_management.config.Config.cas_table:type_name -> vortech.stream_management.config.CasTable
+	2,  // 6: vortech.stream_management.config.Listener.tcp:type_name -> vortech.stream_management.config.TCPSocket
+	3,  // 7: vortech.stream_management.config.Listener.unix:type_name -> vortech.stream_management.config.UnixSocket
+	0,  // 8: vortech.stream_management.config.Logger.level:type_name -> vortech.stream_management.config.Logger.Level
+	6,  // 9: vortech.stream_management.config.StreamToken.jwt_signing:type_name -> vortech.stream_management.config.JwtSigning
+	2,  // 10: vortech.stream_management.config.CasTable.socket:type_name -> vortech.stream_management.config.TCPSocket
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_config_proto_init() }
@@ -464,7 +755,7 @@ func file_config_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_config_proto_rawDesc), len(file_config_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   5,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

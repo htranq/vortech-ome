@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+package vortech.stream_management.health;
+
+import "buf/validate/validate.proto";
+import "google/api/annotations.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "api/v1/health;health";
+
+// TODO Health: temporary service, will remove when add HealthServer middleware
+service Health {
+  // Get the current status of the stream management service.
+  rpc GetStatus(GetStatusRequest) returns (GetStatusResponse) {
+    option (google.api.http) = {get: "/v1/health/status"};
+  }
+}
+
+message GetStatusRequest {
+  string name = 1 [(buf.validate.field).string.min_len = 1];
+}
+
+message GetStatusResponse {
+  string status = 1;
+  string message = 2;
+}

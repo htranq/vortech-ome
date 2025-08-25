@@ -6,7 +6,7 @@ import (
 )
 
 type Outsider struct {
-	casTable castable.CasTable
+	CasTable castable.CasTable
 }
 
 func New(cfg *config.Config) (*Outsider, error) {
@@ -16,6 +16,6 @@ func New(cfg *config.Config) (*Outsider, error) {
 	}
 
 	return &Outsider{
-		casTable: ctb,
+		CasTable: ctb,
 	}, nil
 }

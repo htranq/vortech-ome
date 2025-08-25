@@ -104,9 +104,8 @@ func (x *GetPlaybackUrlRequest) GetAuthorization() *Authorization {
 
 type GetPlaybackUrlResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"` // included stream_token parameter
-	StreamToken   string                 `protobuf:"bytes,2,opt,name=stream_token,json=streamToken,proto3" json:"stream_token,omitempty"`
-	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
+	Url           string                 `protobuf:"bytes,1,opt,name=url,proto3" json:"url,omitempty"`                                    // included stream_token parameter
+	StreamToken   string                 `protobuf:"bytes,2,opt,name=stream_token,json=streamToken,proto3" json:"stream_token,omitempty"` //  google.protobuf.Timestamp expires_at = 3;
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -153,13 +152,6 @@ func (x *GetPlaybackUrlResponse) GetStreamToken() string {
 		return x.StreamToken
 	}
 	return ""
-}
-
-func (x *GetPlaybackUrlResponse) GetExpiresAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.ExpiresAt
-	}
-	return nil
 }
 
 type ExtendStreamTokenRequest struct {
@@ -361,7 +353,7 @@ type Authorization struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// generate HMAC-SHA256 (using secret key)
 	Signature string `protobuf:"bytes,1,opt,name=signature,proto3" json:"signature,omitempty"`
-	// request time, validate within 5 mins
+	// request time, validate within 5 mins, in millisecond
 	Timestamp     int64 `protobuf:"varint,2,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -424,12 +416,10 @@ const file_management_proto_rawDesc = "" +
 	"\n" +
 	"expires_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampH\x00R\texpiresAt\x88\x01\x01\x12a\n" +
 	"\rauthorization\x18\v \x01(\v23.vortech.stream_management.management.AuthorizationB\x06\xbaH\x03\xc8\x01\x01R\rauthorizationB\r\n" +
-	"\v_expires_at\"\x88\x01\n" +
+	"\v_expires_at\"M\n" +
 	"\x16GetPlaybackUrlResponse\x12\x10\n" +
 	"\x03url\x18\x01 \x01(\tR\x03url\x12!\n" +
-	"\fstream_token\x18\x02 \x01(\tR\vstreamToken\x129\n" +
-	"\n" +
-	"expires_at\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\texpiresAt\"\x8c\x01\n" +
+	"\fstream_token\x18\x02 \x01(\tR\vstreamToken\"\x8c\x01\n" +
 	"\x18ExtendStreamTokenRequest\x12!\n" +
 	"\fstream_token\x18\x01 \x01(\tR\vstreamToken\x12>\n" +
 	"\n" +
@@ -479,20 +469,19 @@ var file_management_proto_goTypes = []any{
 var file_management_proto_depIdxs = []int32{
 	7, // 0: vortech.stream_management.management.GetPlaybackUrlRequest.expires_at:type_name -> google.protobuf.Timestamp
 	6, // 1: vortech.stream_management.management.GetPlaybackUrlRequest.authorization:type_name -> vortech.stream_management.management.Authorization
-	7, // 2: vortech.stream_management.management.GetPlaybackUrlResponse.expires_at:type_name -> google.protobuf.Timestamp
-	7, // 3: vortech.stream_management.management.ExtendStreamTokenRequest.expires_at:type_name -> google.protobuf.Timestamp
-	7, // 4: vortech.stream_management.management.ExtendStreamTokenResponse.expires_at:type_name -> google.protobuf.Timestamp
-	0, // 5: vortech.stream_management.management.Management.GetPlaybackUrl:input_type -> vortech.stream_management.management.GetPlaybackUrlRequest
-	2, // 6: vortech.stream_management.management.Management.ExtendStreamToken:input_type -> vortech.stream_management.management.ExtendStreamTokenRequest
-	4, // 7: vortech.stream_management.management.Management.RevokeStreamToken:input_type -> vortech.stream_management.management.RevokeStreamTokenRequest
-	1, // 8: vortech.stream_management.management.Management.GetPlaybackUrl:output_type -> vortech.stream_management.management.GetPlaybackUrlResponse
-	3, // 9: vortech.stream_management.management.Management.ExtendStreamToken:output_type -> vortech.stream_management.management.ExtendStreamTokenResponse
-	5, // 10: vortech.stream_management.management.Management.RevokeStreamToken:output_type -> vortech.stream_management.management.RevokeStreamTokenResponse
-	8, // [8:11] is the sub-list for method output_type
-	5, // [5:8] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	7, // 2: vortech.stream_management.management.ExtendStreamTokenRequest.expires_at:type_name -> google.protobuf.Timestamp
+	7, // 3: vortech.stream_management.management.ExtendStreamTokenResponse.expires_at:type_name -> google.protobuf.Timestamp
+	0, // 4: vortech.stream_management.management.Management.GetPlaybackUrl:input_type -> vortech.stream_management.management.GetPlaybackUrlRequest
+	2, // 5: vortech.stream_management.management.Management.ExtendStreamToken:input_type -> vortech.stream_management.management.ExtendStreamTokenRequest
+	4, // 6: vortech.stream_management.management.Management.RevokeStreamToken:input_type -> vortech.stream_management.management.RevokeStreamTokenRequest
+	1, // 7: vortech.stream_management.management.Management.GetPlaybackUrl:output_type -> vortech.stream_management.management.GetPlaybackUrlResponse
+	3, // 8: vortech.stream_management.management.Management.ExtendStreamToken:output_type -> vortech.stream_management.management.ExtendStreamTokenResponse
+	5, // 9: vortech.stream_management.management.Management.RevokeStreamToken:output_type -> vortech.stream_management.management.RevokeStreamTokenResponse
+	7, // [7:10] is the sub-list for method output_type
+	4, // [4:7] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_management_proto_init() }

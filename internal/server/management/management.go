@@ -2,12 +2,26 @@ package management
 
 import (
 	managementpb "github.com/htranq/vortech-ome/api/v1/management"
+	"github.com/htranq/vortech-ome/internal/authorization"
+	"github.com/htranq/vortech-ome/internal/outsider"
+	"github.com/htranq/vortech-ome/internal/streamtoken"
 )
 
-func New() managementpb.ManagementServer {
-	return &managementServer{}
+func New(outsider *outsider.Outsider,
+	auth authorization.Authorization,
+	streamToken streamtoken.StreamToken) managementpb.ManagementServer {
+	return &managementServer{
+		outsider:    outsider,
+		auth:        auth,
+		streamToken: streamToken,
+	}
 }
 
 type managementServer struct {
 	managementpb.UnimplementedManagementServer
+
+	outsider *outsider.Outsider
+
+	auth        authorization.Authorization
+	streamToken streamtoken.StreamToken
 }

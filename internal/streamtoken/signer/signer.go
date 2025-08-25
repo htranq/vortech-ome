@@ -14,7 +14,7 @@ type Claims struct {
 	jwt.RegisteredClaims
 
 	TokenType string `json:"token_type"` // access_token, id_token
-	// TODO add more fields if needed
+	// TODO add more fields if needed, for example: table_id, service_id ...
 }
 
 type Token struct {

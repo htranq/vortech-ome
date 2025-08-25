@@ -4,14 +4,14 @@ import (
 	"crypto/ed25519"
 	"time"
 
-	"github.com/golang-jwt/jwt"
+	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 
 	"github.com/htranq/vortech-ome/pkg/config"
 )
 
 type Claims struct {
-	jwt.StandardClaims
+	jwt.RegisteredClaims
 
 	TokenType string `json:"token_type"` // access_token, id_token
 	// TODO add more fields if needed
@@ -53,7 +53,7 @@ func New(tokenType string, jwtSigning *config.JwtSigning) (Signer, error) {
 func (t *signer) Create(identity, audience string) (*Token, error) {
 	var (
 		now = time.Now()
-		iat = now.UTC().Unix()
+		iat = now
 		exp = now.Add(t.expiry)
 		id  = uuid.New().String()
 	)
@@ -63,12 +63,12 @@ func (t *signer) Create(identity, audience string) (*Token, error) {
 
 	claims := &Claims{
 		TokenType: t.tokenType,
-		StandardClaims: jwt.StandardClaims{
-			Id:        id,
-			ExpiresAt: exp.Unix(),
-			IssuedAt:  iat,
-			NotBefore: iat,
-			Audience:  audience,
+		RegisteredClaims: jwt.RegisteredClaims{
+			ID:        id,
+			ExpiresAt: jwt.NewNumericDate(exp),
+			IssuedAt:  jwt.NewNumericDate(iat),
+			NotBefore: jwt.NewNumericDate(iat),
+			Audience:  []string{audience},
 			Subject:   identity,
 			Issuer:    t.issuer,
 		},

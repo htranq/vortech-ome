@@ -113,15 +113,14 @@ var File_cas_proto protoreflect.FileDescriptor
 
 const file_cas_proto_rawDesc = "" +
 	"\n" +
-	"\tcas.proto\x12\tcas.table\"1\n" +
+	"\tcas.proto\x12\x13cas.table.operation\"1\n" +
 	"\x15GetPlayBackUrlRequest\x12\x18\n" +
 	"\atableId\x18\x01 \x01(\tR\atableId\":\n" +
 	"\x16GetPlayBackUrlResponse\x12 \n" +
-	"\vplayBackUrl\x18\x01 \x01(\tR\vplayBackUrl2e\n" +
-	"\fTableService\x12U\n" +
-	"\x0eGetPlayBackUrl\x12 .cas.table.GetPlayBackUrlRequest\x1a!.cas.table.GetPlayBackUrlResponseBz\n" +
-	"\rcom.cas.tableB\bCasProtoP\x01Z\x1apkg/cas/api/v1/table;table\xa2\x02\x03CTX\xaa\x02\tCas.Table\xca\x02\tCas\\Table\xe2\x02\x15Cas\\Table\\GPBMetadata\xea\x02\n" +
-	"Cas::Tableb\x06proto3"
+	"\vplayBackUrl\x18\x01 \x01(\tR\vplayBackUrl2y\n" +
+	"\fTableService\x12i\n" +
+	"\x0eGetPlayBackUrl\x12*.cas.table.operation.GetPlayBackUrlRequest\x1a+.cas.table.operation.GetPlayBackUrlResponseB\xad\x01\n" +
+	"\x17com.cas.table.operationB\bCasProtoP\x01Z\x1apkg/cas/api/v1/table;table\xa2\x02\x03CTO\xaa\x02\x13Cas.Table.Operation\xca\x02\x13Cas\\Table\\Operation\xe2\x02\x1fCas\\Table\\Operation\\GPBMetadata\xea\x02\x15Cas::Table::Operationb\x06proto3"
 
 var (
 	file_cas_proto_rawDescOnce sync.Once
@@ -137,12 +136,12 @@ func file_cas_proto_rawDescGZIP() []byte {
 
 var file_cas_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_cas_proto_goTypes = []any{
-	(*GetPlayBackUrlRequest)(nil),  // 0: cas.table.GetPlayBackUrlRequest
-	(*GetPlayBackUrlResponse)(nil), // 1: cas.table.GetPlayBackUrlResponse
+	(*GetPlayBackUrlRequest)(nil),  // 0: cas.table.operation.GetPlayBackUrlRequest
+	(*GetPlayBackUrlResponse)(nil), // 1: cas.table.operation.GetPlayBackUrlResponse
 }
 var file_cas_proto_depIdxs = []int32{
-	0, // 0: cas.table.TableService.GetPlayBackUrl:input_type -> cas.table.GetPlayBackUrlRequest
-	1, // 1: cas.table.TableService.GetPlayBackUrl:output_type -> cas.table.GetPlayBackUrlResponse
+	0, // 0: cas.table.operation.TableService.GetPlayBackUrl:input_type -> cas.table.operation.GetPlayBackUrlRequest
+	1, // 1: cas.table.operation.TableService.GetPlayBackUrl:output_type -> cas.table.operation.GetPlayBackUrlResponse
 	1, // [1:2] is the sub-list for method output_type
 	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name

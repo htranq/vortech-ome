@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TableService_GetPlayBackUrl_FullMethodName = "/cas.table.TableService/GetPlayBackUrl"
+	TableService_GetPlayBackUrl_FullMethodName = "/cas.table.operation.TableService/GetPlayBackUrl"
 )
 
 // TableServiceClient is the client API for TableService service.
@@ -108,7 +108,7 @@ func _TableService_GetPlayBackUrl_Handler(srv interface{}, ctx context.Context, 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var TableService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "cas.table.TableService",
+	ServiceName: "cas.table.operation.TableService",
 	HandlerType: (*TableServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

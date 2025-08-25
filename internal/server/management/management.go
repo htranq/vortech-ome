@@ -8,12 +8,12 @@ import (
 )
 
 func New(outsider *outsider.Outsider,
-	auth authorization.Authorization,
+	authorization authorization.Authorization,
 	streamToken streamtoken.StreamToken) managementpb.ManagementServer {
 	return &managementServer{
-		outsider:    outsider,
-		auth:        auth,
-		streamToken: streamToken,
+		outsider:      outsider,
+		authorization: authorization,
+		streamToken:   streamToken,
 	}
 }
 
@@ -22,6 +22,6 @@ type managementServer struct {
 
 	outsider *outsider.Outsider
 
-	auth        authorization.Authorization
-	streamToken streamtoken.StreamToken
+	authorization authorization.Authorization
+	streamToken   streamtoken.StreamToken
 }

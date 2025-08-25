@@ -18,11 +18,16 @@ import (
 
 	healthpb "github.com/htranq/vortech-ome/api/v1/health"
 	managementpb "github.com/htranq/vortech-ome/api/v1/management"
+	webhookspb "github.com/htranq/vortech-ome/api/v1/webhooks"
+	authorizationsv "github.com/htranq/vortech-ome/internal/authorization"
 	"github.com/htranq/vortech-ome/internal/config"
 	"github.com/htranq/vortech-ome/internal/logging"
+	outsidersv "github.com/htranq/vortech-ome/internal/outsider"
 	"github.com/htranq/vortech-ome/internal/server/api"
 	healthsrv "github.com/htranq/vortech-ome/internal/server/health"
 	managementsrv "github.com/htranq/vortech-ome/internal/server/management"
+	webhookssrv "github.com/htranq/vortech-ome/internal/server/webhooks"
+	streamtokensv "github.com/htranq/vortech-ome/internal/streamtoken"
 	configpb "github.com/htranq/vortech-ome/pkg/config"
 )
 
@@ -40,12 +45,31 @@ func serve(cfg *configpb.Config) {
 		service = newService(cfg)
 		logger  = service.Logger()
 	)
+
+	logger.Info("init internal services")
+	authorization, err := authorizationsv.New(cfg.GetAuthorization())
+	if err != nil {
+		logger.Fatal("failed to create authorization", zap.Error(err))
+	}
+
+	streamToken, err := streamtokensv.New(cfg.GetStreamToken())
+	if err != nil {
+		logger.Fatal("failed to create stream token", zap.Error(err))
+	}
+
+	logger.Info("init outsider")
+	outsider, err := outsidersv.New(cfg)
+	if err != nil {
+		logger.Fatal("failed to create outsider", zap.Error(err))
+	}
+
 	logger.Info("starting server", zap.Any("config", cfg))
 
 	// init server handlers
 	var (
 		health     = healthsrv.New()
-		management = managementsrv.New()
+		management = managementsrv.New(outsider, authorization, streamToken)
+		webhooks   = webhookssrv.New(streamToken)
 	)
 
 	// register grpc servers
@@ -110,10 +134,16 @@ func serve(cfg *configpb.Config) {
 	grpcAddr := service.GrpcAddress()
 	dialOpts := []grpc.DialOption{grpc.WithTransportCredentials(insecure.NewCredentials())}
 
-	// With HealthServer, we chose Option 2 because interceptor consistency is more valuable than micro-performance
-	err := healthpb.RegisterHealthHandlerFromEndpoint(ctx, grpcGatewayMux, grpcAddr, dialOpts)
+	// with HealthServer, we chose Option 2 because interceptor consistency is more valuable than micro-performance
+	err = healthpb.RegisterHealthHandlerFromEndpoint(ctx, grpcGatewayMux, grpcAddr, dialOpts)
 	if err != nil {
 		logger.Fatal("could not register health http server", zap.Error(err))
+	}
+
+	// with WebhooksServer, we chose Option 1 to faster performance. Actually, Option 3 is the best
+	err = webhookspb.RegisterWebhooksHandlerServer(ctx, grpcGatewayMux, webhooks)
+	if err != nil {
+		logger.Fatal("could not register webhooks http server", zap.Error(err))
 	}
 
 	// add grpc-gateway mux to HTTP server
@@ -186,8 +216,8 @@ func newService(cfg *configpb.Config) api.Service {
 		api.WithHttpListener(httpListener),
 		api.WithServerOptions(
 			grpc.ChainUnaryInterceptor(
-				executionInterceptor, // FIRST - injects request ID and measures total time
-				protovalidateitct.UnaryServerInterceptor(validator),
+				executionInterceptor,                                // FIRST - injects request ID and measures total time
+				protovalidateitct.UnaryServerInterceptor(validator), // SECOND - validate request
 			),
 		),
 	}

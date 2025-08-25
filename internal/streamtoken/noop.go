@@ -1,14 +1,22 @@
 package streamtoken
 
-import "errors"
+import (
+	"context"
+
+	"github.com/htranq/vortech-ome/internal/logging"
+)
 
 type noop struct {
 }
 
-func (*noop) Issue(_ string) (string, error) {
-	return "", errors.New("unsupported")
+func (*noop) Issue(ctx context.Context, _ string) (string, error) {
+	logging.Logger(ctx).Warn("noop unsupported")
+
+	return "", nil
 }
 
-func (*noop) Verify(_ string) (bool, error) {
-	return false, errors.New("unsupported")
+func (*noop) Verify(ctx context.Context, _ string) error {
+	logging.Logger(ctx).Warn("noop unsupported")
+
+	return nil
 }

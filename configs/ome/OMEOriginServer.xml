@@ -177,15 +177,15 @@
 				<Url>*</Url>
 			</CrossDomains>
 
-			<!-- <AdmissionWebhooks>
-				<ControlServerUrl>http://toni:8081/api/v1/admission</ControlServerUrl>
+			<AdmissionWebhooks>
+				<ControlServerUrl>http://stream_management:8081/v1/admission</ControlServerUrl>
 				<SecretKey>1234</SecretKey>
 				<Timeout>3000</Timeout>
 				<Enables>
 					<Providers>rtmp,webrtc,srt</Providers>
 					<Publishers>webrtc,llhls,thumbnail,srt</Publishers>
 				</Enables>
-			</AdmissionWebhooks> -->
+			</AdmissionWebhooks>
 
 			<!-- Settings for applications -->
 			<Applications>

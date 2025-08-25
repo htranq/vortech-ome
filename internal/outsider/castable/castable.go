@@ -21,7 +21,9 @@ type casTableImpl struct {
 func New(cfg *configpb.CasTable) (CasTable, error) {
 	if !cfg.GetEnabled() {
 		logging.Logger(context.Background()).Info("CasTable disabled, init noop")
-		return &noop{}, nil
+		return &noop{
+			playbackUrl: cfg.GetNoopDefaultPlaybackUrl(),
+		}, nil
 	}
 	client, err := cascli.NewTableClient(cfg.GetSocket())
 	if err != nil {

@@ -581,11 +581,12 @@ func (x *StreamToken) GetJwtSigning() *JwtSigning {
 }
 
 type CasTable struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Enabled       bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	Socket        *TCPSocket             `protobuf:"bytes,2,opt,name=socket,proto3" json:"socket,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	Enabled                bool                   `protobuf:"varint,1,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	Socket                 *TCPSocket             `protobuf:"bytes,2,opt,name=socket,proto3" json:"socket,omitempty"`
+	NoopDefaultPlaybackUrl string                 `protobuf:"bytes,3,opt,name=noop_default_playback_url,json=noopDefaultPlaybackUrl,proto3" json:"noop_default_playback_url,omitempty"` // in case disabled
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *CasTable) Reset() {
@@ -630,6 +631,13 @@ func (x *CasTable) GetSocket() *TCPSocket {
 		return x.Socket
 	}
 	return nil
+}
+
+func (x *CasTable) GetNoopDefaultPlaybackUrl() string {
+	if x != nil {
+		return x.NoopDefaultPlaybackUrl
+	}
+	return ""
 }
 
 var File_config_proto protoreflect.FileDescriptor
@@ -680,10 +688,11 @@ const file_config_proto_rawDesc = "" +
 	"\vStreamToken\x12\x18\n" +
 	"\aenabled\x18\x01 \x01(\bR\aenabled\x12M\n" +
 	"\vjwt_signing\x18\x02 \x01(\v2,.vortech.stream_management.config.JwtSigningR\n" +
-	"jwtSigning\"q\n" +
+	"jwtSigning\"\xac\x01\n" +
 	"\bCasTable\x12\x18\n" +
 	"\aenabled\x18\x01 \x01(\bR\aenabled\x12K\n" +
-	"\x06socket\x18\x02 \x01(\v2+.vortech.stream_management.config.TCPSocketB\x06\xbaH\x03\xc8\x01\x01R\x06socketB\xe4\x01\n" +
+	"\x06socket\x18\x02 \x01(\v2+.vortech.stream_management.config.TCPSocketB\x06\xbaH\x03\xc8\x01\x01R\x06socket\x129\n" +
+	"\x19noop_default_playback_url\x18\x03 \x01(\tR\x16noopDefaultPlaybackUrlB\xe4\x01\n" +
 	"$com.vortech.stream_management.configB\vConfigProtoP\x01Z\x11pkg/config;config\xa2\x02\x03VSC\xaa\x02\x1fVortech.StreamManagement.Config\xca\x02\x1fVortech\\StreamManagement\\Config\xe2\x02+Vortech\\StreamManagement\\Config\\GPBMetadata\xea\x02!Vortech::StreamManagement::Configb\x06proto3"
 
 var (

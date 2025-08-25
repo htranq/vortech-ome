@@ -11,12 +11,13 @@ import (
 )
 
 const (
-	_tokenType = "stream_token"
+	TokenQueryUrl = "stream_token"
+	_tokenType    = "access_token"
 )
 
 type StreamToken interface {
-	Issue(identity string) (string, error)
-	Verify(raw string) (bool, error)
+	Issue(ctx context.Context, identity string) (string, error)
+	Verify(ctx context.Context, raw string) error
 }
 
 type streamTokenImpl struct {
@@ -41,7 +42,7 @@ func New(cfg *config.StreamToken) (StreamToken, error) {
 	}, nil
 }
 
-func (s *streamTokenImpl) Issue(identity string) (string, error) {
+func (s *streamTokenImpl) Issue(_ context.Context, identity string) (string, error) {
 	token, err := s.signer.Create(identity, "")
 	if err != nil {
 		return "", err
@@ -50,20 +51,20 @@ func (s *streamTokenImpl) Issue(identity string) (string, error) {
 	return token.Raw, nil
 }
 
-func (s *streamTokenImpl) Verify(raw string) (bool, error) {
+func (s *streamTokenImpl) Verify(_ context.Context, raw string) error {
 	token, err := s.signer.Parse(raw)
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	exp, err := token.GetExpirationTime()
 	if err != nil {
-		return false, err
+		return err
 	}
 
 	if exp.Before(time.Now()) {
-		return false, errors.New("token is expired")
+		return errors.New("token is expired")
 	}
 
-	return true, nil
+	return nil
 }

@@ -8,17 +8,14 @@ import (
 	"github.com/htranq/vortech-ome/internal/logging"
 )
 
-const (
-	_noopPlaybackUrl = "wss://localhost:3333/app/stream"
-)
-
 type noop struct {
+	playbackUrl string
 }
 
-func (c *noop) GetPlaybackUrl(ctx context.Context, tableID string) (string, error) {
+func (s *noop) GetPlaybackUrl(ctx context.Context, tableID string) (string, error) {
 	logging.Logger(ctx).Warn("noop GetPlaybackUrl, return default value",
 		zap.String("table_id", tableID),
-		zap.String("playback_url", _noopPlaybackUrl))
+		zap.String("playback_url", s.playbackUrl))
 
-	return "", nil
+	return s.playbackUrl, nil
 }

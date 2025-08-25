@@ -18,6 +18,7 @@ service Management {
 
 message GetPlaybackUrlRequest {
   string table_id = 1 [(buf.validate.field).string = {min_len: 1}];
+  // TODO could remove if OME not allow to terminate stream session
   string service_id = 2 [(buf.validate.field).string = {min_len: 1}];
   string user_id = 3 [(buf.validate.field).string = {min_len: 1}];
   // TODO consider using expires_at or ttl (expires_in, expiry_duration)

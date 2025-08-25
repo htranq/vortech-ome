@@ -73,5 +73,6 @@ message StreamToken {
 message CasTable {
   bool enabled = 1;
   TCPSocket socket = 2 [(buf.validate.field).required = true];
+  string noop_default_playback_url = 3; // in case disabled
 }
 
